@@ -11,6 +11,8 @@
 
     --muted: #6B7789;
 
+
+
     --line: #E7E9ED;
 
     --surface: #F6F7F9;
@@ -114,7 +116,7 @@ input {
 
     flex-shrink: 0;
 
-    background: var(--line);
+    background: var(--white);
 
     color: #C9D2E0;
 
@@ -122,9 +124,9 @@ input {
 
     flex-direction: column;
 
-    padding: 20px 14px;
+    padding: 18px 14px;
 
-    gap: 18px;
+    gap: 10px;
 
     transition:
         margin-left 0.2s ease;
@@ -151,7 +153,7 @@ input {
     gap: 12px;
 
     padding:
-        6px 8px 14px;
+        0px;
 
     border-bottom:
         1px solid rgba(255,255,255,0.08);
@@ -186,7 +188,7 @@ input {
 
     height: 5px;
 
-    margin-top: 3px;
+    margin-top: 0px;
 
     border-radius:
         0 0 20px 20px;
@@ -582,7 +584,7 @@ input {
 
     flex-direction: column;
 
-    background: var(--surface);
+    background: var(--white);
 
     height: 100vh;
 }
@@ -711,82 +713,61 @@ input {
     display: flex;
 
     align-items: center;
+    justify-content: center;
 
     gap: 7px;
 
     font-size: 12.5px;
-
     font-weight: 600;
 
-    color: #17803D;
+    color: var(--red);
 
-    padding: 7px 14px;
+    padding: 8px 14px;
 
     border-radius: 999px;
 
-    background: #E9FBF0;
+    background: #fafafa;
+
+    border: 1px solid var(--red-dark);
 
     flex-shrink: 0;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.1s ease;
 }
 
 
-/* =========================================================
-   STATUS DOT
-========================================================= */
+.workspace-status:hover {
 
-.pulse-dot {
+    background: var(--red-dark);
 
-    width: 8px;
-    height: 8px;
+    color: #FFFFFF;
 
-    border-radius: 50%;
+    border-color: var(--red-dark);
 
-    background: var(--green);
+}
 
-    box-shadow:
-        0 0 0 0
-        rgba(34,197,94,0.55);
 
-    animation:
-        pulse 2s infinite;
+.workspace-status:active {
+
+    transform: scale(0.96);
+
+}
+
+
+.workspace-status svg {
+
+    width: 16px;
+    height: 16px;
 
     flex-shrink: 0;
-}
-
-
-.pulse-dot--sm {
-
-    width: 7px;
-    height: 7px;
-}
-
-
-@keyframes pulse {
-
-    0% {
-
-        box-shadow:
-            0 0 0 0
-            rgba(34,197,94,0.55);
-
-    }
-
-    70% {
-
-        box-shadow:
-            0 0 0 7px
-            rgba(34,197,94,0);
-
-    }
-
-    100% {
-
-        box-shadow:
-            0 0 0 0
-            rgba(34,197,94,0);
-
-    }
-
 }
 
 
@@ -853,7 +834,7 @@ input {
 
 .bot-message {
 
-    background: var(--white);
+    background: var(--surface);
 
     color: var(--ink);
 
@@ -874,7 +855,7 @@ input {
 
 .user-message {
 
-    background: var(--navy);
+    background: var(--red-dark);
 
     color: var(--white);
 
@@ -1264,8 +1245,8 @@ input {
 }
 
 .brand-logo {
-    width: 50px;
-    height: 50px;
+    width: 90px;
+    height: 90px;
     display: block;
     object-fit: contain;
 }
