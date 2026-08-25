@@ -9,3 +9,7 @@ RewriteRule ^api/support-requests/?$ api/support-requests.php [L]
 
 # PATCH api/support-requests/{id}  -> api/support-requests.php?id={id}
 RewriteRule ^api/support-requests/([^/]+)/?$ api/support-requests.php?id=$1 [L,QSA]
+
+# POST api/auth/login   -> api/auth.php?action=login
+# POST api/auth/logout  -> api/auth.php?action=logout
+RewriteRule ^api/auth/(login|logout)/?$ api/auth.php?action=$1 [L,QSA]

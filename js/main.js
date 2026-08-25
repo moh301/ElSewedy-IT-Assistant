@@ -67,7 +67,8 @@ const ICONS = {
     edit: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
     penModern: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>`,
     globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18"/><path d="M12 3a14 14 0 0 0 0 18"/></svg>`,
-    search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>`
+    search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>`,
+    logout: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>`
 };
 
 /* ---------- Two-tone tile icons for the homepage category grid ---------- */
@@ -199,7 +200,6 @@ function renderIndexPage(code) {
     document.title = `SWE IT Assist`;
 
     setText("productTag", ui.productTag);
-    setText("statusText", ui.statusActive);
     setText("heroEyebrow", ui.heroEyebrow);
     setHTML("heroTitle", ui.heroTitleHtml);
     setText("heroSubtitle", ui.heroSubtitle);
@@ -243,6 +243,7 @@ function renderIndexPage(code) {
     paintStaticIcons();
     renderLanguageSwitcher(code);
     initHeaderSearch(code);
+    wireAuthChrome(ui);
 }
 
 /* ---------- CATEGORY PAGE ---------- */
@@ -319,6 +320,7 @@ function renderCategoryPage(code) {
     paintStaticIcons();
     renderLanguageSwitcher(code);
     initHeaderSearch(code, catKey);
+    wireAuthChrome(ui);
 }
 
 function buildIssueCard(issue, index, ui) {
@@ -509,6 +511,17 @@ function setHTML(id, value) {
 function paintStaticIcons() {
     document.querySelectorAll("[data-icon]").forEach((el) => {
         el.innerHTML = icon(el.getAttribute("data-icon"));
+    });
+}
+
+// Translates the logout button's accessible label/tooltip. The button's
+// icon is static markup in the HTML (see js/auth.js for the actual
+// name-display + click-to-logout wiring, which is shared across every
+// page that requires sign-in).
+function wireAuthChrome(ui) {
+    document.querySelectorAll("[data-auth-logout]").forEach((btn) => {
+        btn.setAttribute("aria-label", ui.logout);
+        btn.title = ui.logout;
     });
 }
 

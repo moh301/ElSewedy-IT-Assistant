@@ -25,6 +25,12 @@ if ($uri === '/api/support-requests') {
     return true;
 }
 
+if ($uri === '/api/auth/login' || $uri === '/api/auth/logout') {
+    $_GET['action'] = $uri === '/api/auth/login' ? 'login' : 'logout';
+    require __DIR__ . '/api/auth.php';
+    return true;
+}
+
 if ($uri === '/health') {
     require __DIR__ . '/health.php';
     return true;

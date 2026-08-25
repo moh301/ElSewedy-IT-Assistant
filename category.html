@@ -8,6 +8,8 @@
 </head>
 <body data-page="category">
 
+    <script src="js/auth.js"></script>
+
     <div class="bg-ambient"></div>
 
     <!-- ================= HEADER ================= -->
@@ -34,6 +36,12 @@
                 <span class="back-arrow" data-icon="arrowLeft"></span>
                 <span id="backLabel">All categories</span>
             </a>
+            <div class="user-menu">
+                <span class="user-menu-name" data-auth-name></span>
+                <button type="button" class="logout-btn" data-auth-logout aria-label="Log out" title="Log out">
+                    <span data-icon="logout"></span>
+                </button>
+            </div>
         </div>
     </header>
 

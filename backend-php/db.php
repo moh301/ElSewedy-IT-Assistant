@@ -40,6 +40,13 @@ function get_db_connection(): PDO {
             submitted_at VARCHAR(40) NOT NULL,
             received_at VARCHAR(40) NOT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS employees (
+            employee_id VARCHAR(20) PRIMARY KEY,
+            email VARCHAR(190) NOT NULL,
+            name VARCHAR(190) NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        seed_employees($pdo);
     } else {
         $dataDir = __DIR__ . '/data';
         if (!is_dir($dataDir)) mkdir($dataDir, 0775, true);
@@ -62,9 +69,40 @@ function get_db_connection(): PDO {
             submitted_at TEXT NOT NULL,
             received_at TEXT NOT NULL
         )");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS employees (
+            employee_id TEXT PRIMARY KEY,
+            email TEXT NOT NULL,
+            name TEXT NOT NULL
+        )");
+        seed_employees($pdo);
     }
 
     return $pdo;
+}
+
+/**
+ * A small mock "HR directory" so the login page has something real to
+ * check credentials against without wiring up an actual identity system.
+ * Only runs the inserts once — skipped once the table already has rows,
+ * so it's safe to call on every request.
+ */
+function seed_employees(PDO $pdo): void {
+    $count = (int)$pdo->query('SELECT COUNT(*) FROM employees')->fetchColumn();
+    if ($count > 0) return;
+
+    $demoEmployees = [
+        ['10234', 'ahmed.hassan@elsewedy.com', 'Ahmed Hassan'],
+        ['10547', 'mohamed.hazam@elsewedy.com', 'Mohamed Hazam'],
+        ['10892', 'sara.ibrahim@elsewedy.com', 'Sara Ibrahim'],
+        ['11023', 'youssif.zaghloul@elsewedy.com', 'Youssif Zaghloul'],
+        ['11150', 'mona.tarek@elsewedy.com', 'Mona Tarek'],
+    ];
+
+    $stmt = $pdo->prepare('INSERT INTO employees (employee_id, email, name) VALUES (?, ?, ?)');
+    foreach ($demoEmployees as $row) {
+        $stmt->execute($row);
+    }
 }
 
 function generate_uuid(): string {

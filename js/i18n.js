@@ -59,7 +59,8 @@ en: {
         langLabel: "Language",
         getStarted: "Get started",
         searchPlaceholder: "Search for help…",
-        searchNoResults: "No results match your search."
+        searchNoResults: "No results match your search.",
+        logout: "Log out"
     },
     chat: {
         product: "IT Assist",
@@ -75,6 +76,22 @@ en: {
         hint: "SWE IT Assist can make mistakes. Verify critical steps with the IT helpdesk.",
         backAria: "Back to IT Self-Service Portal",
         errorFallback: "Sorry, something went wrong. Make sure the chatbot backend is running, then try again."
+    },
+    auth: {
+        eyebrow: "Employee Sign In",
+        title: "Welcome back",
+        subtitle: "Sign in with your Employee ID and work email to continue.",
+        employeeIdLabel: "Employee ID",
+        employeeIdPlaceholder: "e.g. 10234",
+        emailLabel: "Work email",
+        emailPlaceholder: "e.g. name@elsewedy.com",
+        signIn: "Sign in",
+        signingIn: "Signing in…",
+        errorEmpty: "Enter your Employee ID and work email.",
+        errorFormat: "Use your work email, e.g. name@elsewedy.com.",
+        errorInvalid: "We couldn’t match that Employee ID with that email address.",
+        errorGeneric: "Something went wrong while signing in. Please try again.",
+        footerNote: "Having trouble signing in? Contact the IT Service Desk on extension 2000."
     },
     categories: {
         network: {
@@ -190,7 +207,8 @@ ar: {
         langLabel: "اللغة",
         getStarted: "ابدأ الآن",
         searchPlaceholder: "ابحث عن مساعدة…",
-        searchNoResults: "لا توجد نتائج مطابقة لبحثك."
+        searchNoResults: "لا توجد نتائج مطابقة لبحثك.",
+        logout: "تسجيل الخروج"
     },
     chat: {
         product: "مساعد تقني",
@@ -206,6 +224,22 @@ ar: {
         hint: "SWE IT Assist ممكن يخطئ أحيانًا. تأكد من الخطوات المهمة مع فريق الدعم الفني.",
         backAria: "الرجوع إلى بوابة الخدمة الذاتية",
         errorFallback: "حصلت مشكلة أثناء إرسال الرسالة. تأكد إن سيرفر الشات بوت شغال وجرب تاني."
+    },
+    auth: {
+        eyebrow: "تسجيل دخول الموظفين",
+        title: "أهلاً بيك تاني",
+        subtitle: "سجّل الدخول برقم الموظف وبريد العمل عشان تكمل.",
+        employeeIdLabel: "رقم الموظف",
+        employeeIdPlaceholder: "مثال: 10234",
+        emailLabel: "بريد العمل",
+        emailPlaceholder: "مثال: name@elsewedy.com",
+        signIn: "تسجيل الدخول",
+        signingIn: "جارٍ تسجيل الدخول…",
+        errorEmpty: "من فضلك أدخل رقم الموظف وبريد العمل.",
+        errorFormat: "استخدم بريد العمل الخاص بك، مثال: name@elsewedy.com.",
+        errorInvalid: "رقم الموظف ده مش متطابق مع البريد الإلكتروني ده.",
+        errorGeneric: "حدث خطأ أثناء تسجيل الدخول. من فضلك حاول مرة أخرى.",
+        footerNote: "بتواجه مشكلة في تسجيل الدخول؟ تواصل مع مكتب خدمة تقنية المعلومات على الرقم الداخلي 2000."
     },
     categories: {
         network: {
@@ -321,7 +355,8 @@ es: {
         langLabel: "Idioma",
         getStarted: "Comenzar",
         searchPlaceholder: "Buscar ayuda…",
-        searchNoResults: "No hay resultados que coincidan con tu búsqueda."
+        searchNoResults: "No hay resultados que coincidan con tu búsqueda.",
+        logout: "Cerrar sesión"
     },
     chat: {
         product: "Asistente TI",
@@ -337,6 +372,22 @@ es: {
         hint: "SWE IT Assist puede cometer errores. Verifica los pasos críticos con la mesa de ayuda de TI.",
         backAria: "Volver al portal de autoservicio",
         errorFallback: "Algo salió mal. Asegúrate de que el backend del chatbot esté en ejecución e inténtalo de nuevo."
+    },
+    auth: {
+        eyebrow: "Acceso de empleados",
+        title: "Bienvenido de nuevo",
+        subtitle: "Inicia sesión con tu ID de empleado y tu correo del trabajo para continuar.",
+        employeeIdLabel: "ID de empleado",
+        employeeIdPlaceholder: "p. ej. 10234",
+        emailLabel: "Correo del trabajo",
+        emailPlaceholder: "p. ej. name@elsewedy.com",
+        signIn: "Iniciar sesión",
+        signingIn: "Iniciando sesión…",
+        errorEmpty: "Introduce tu ID de empleado y tu correo del trabajo.",
+        errorFormat: "Usa tu correo del trabajo, p. ej. name@elsewedy.com.",
+        errorInvalid: "No pudimos hacer coincidir ese ID de empleado con ese correo electrónico.",
+        errorGeneric: "Algo salió mal al iniciar sesión. Inténtalo de nuevo.",
+        footerNote: "¿Problemas para iniciar sesión? Contacta con la Mesa de Ayuda de TI en la extensión 2000."
     },
     categories: {
         network: {
@@ -452,7 +503,8 @@ zh: {
         langLabel: "语言",
         getStarted: "开始",
         searchPlaceholder: "搜索帮助…",
-        searchNoResults: "没有符合您搜索条件的结果。"
+        searchNoResults: "没有符合您搜索条件的结果。",
+        logout: "退出登录"
     },
     chat: {
         product: "IT 助手",
@@ -468,6 +520,22 @@ zh: {
         hint: "SWE IT Assist 可能会出错。重要步骤请与 IT 服务台核实。",
         backAria: "返回自助服务门户",
         errorFallback: "出了点问题。请确认聊天机器人后端正在运行，然后重试。"
+    },
+    auth: {
+        eyebrow: "员工登录",
+        title: "欢迎回来",
+        subtitle: "请输入您的员工编号和工作邮箱以继续。",
+        employeeIdLabel: "员工编号",
+        employeeIdPlaceholder: "例如：10234",
+        emailLabel: "工作邮箱",
+        emailPlaceholder: "例如：name@elsewedy.com",
+        signIn: "登录",
+        signingIn: "登录中…",
+        errorEmpty: "请输入您的员工编号和工作邮箱。",
+        errorFormat: "请使用您的工作邮箱，例如：name@elsewedy.com。",
+        errorInvalid: "该员工编号与该邮箱地址不匹配。",
+        errorGeneric: "登录时出现问题，请重试。",
+        footerNote: "登录遇到问题？请拨打 IT 服务台分机 2000。"
     },
     categories: {
         network: {

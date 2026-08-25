@@ -119,6 +119,41 @@ Because the AI chatbot your colleagues are building can call this exact
 same endpoint with `"source": "chatbot"`, every support request — from the
 website or the chat — lands in the same database.
 
+## Employee login (mock, for demo purposes)
+
+The whole site now sits behind `login.html` — visiting `index.html`,
+`category.html`, or the chatbot without being signed in redirects there
+automatically (see `js/auth.js`). Signing in checks the Employee ID + work
+email against a real `employees` table, seeded automatically the first
+time `db.php` runs (same auto-create pattern as `support_requests`) with
+five demo accounts:
+
+| Employee ID | Work email                        | Name             |
+|-------------|-------------------------------------|------------------|
+| `10234`     | `ahmed.hassan@elsewedy.com`         | Ahmed Hassan     |
+| `10547`     | `mohamed.hazam@elsewedy.com`        | Mohamed Hazam    |
+| `10892`     | `sara.ibrahim@elsewedy.com`         | Sara Ibrahim     |
+| `11023`     | `youssif.zaghloul@elsewedy.com`     | Youssif Zaghloul |
+| `11150`     | `mona.tarek@elsewedy.com`           | Mona Tarek       |
+
+To add/remove employees for a real deployment, edit the `$demoEmployees`
+array in `db.php` (only runs while the table is empty) or insert directly
+into the `employees` table — see `schema.mysql.sql`.
+
+This is intentionally lightweight: there's no real session or password —
+just an Employee ID + a `@elsewedy.com` email that has to match a row in
+the table. A successful login is remembered in the browser's
+`sessionStorage` (cleared when the tab closes), not a server-side session.
+That's enough to gate a static-HTML site like this one; it is **not**
+meant to be real access control for sensitive data.
+
+- `POST /api/auth/login` — body `{ "employeeId": "10234", "email":
+  "ahmed.hassan@elsewedy.com" }`. Returns `200 { "ok": true, "user": {...}
+  }` on a match, or `401` with an error message otherwise.
+- `POST /api/auth/logout` — no body needed. Nothing to actually tear down
+  server-side; it exists so the frontend's logout button has somewhere
+  real to call.
+
 ## Configuration
 
 All of these can be set as real environment variables (check your host's

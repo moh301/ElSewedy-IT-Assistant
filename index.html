@@ -8,6 +8,8 @@
 </head>
 <body data-page="index">
 
+    <script src="js/auth.js"></script>
+
     <div class="bg-ambient"></div>
 
     <!-- ================= HEADER ================= -->
@@ -30,9 +32,11 @@
 
         <div class="header-right">
             <div class="lang-switcher" id="langSwitcher"></div>
-            <div class="system-status">
-                <span class="status-dot"></span>
-                <span id="statusText">24/7 AI System Active</span>
+            <div class="user-menu">
+                <span class="user-menu-name" data-auth-name></span>
+                <button type="button" class="logout-btn" data-auth-logout aria-label="Log out" title="Log out">
+                    <span data-icon="logout"></span>
+                </button>
             </div>
         </div>
     </header>

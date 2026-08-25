@@ -403,6 +403,127 @@ button {
     height: 100%;
 }
 
+/* ================= USER MENU / LOGOUT ================= */
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-menu-name {
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--ink-500);
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink-500);
+    cursor: pointer;
+
+    transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.logout-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.logout-btn:hover,
+.logout-btn:focus-visible {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+}
+
+@media (max-width: 640px) {
+    .user-menu-name {
+        display: none;
+    }
+}
+
+/* ================= AUTH / LOGIN PAGE ================= */
+
+.auth-shell {
+    min-height: calc(100vh - 76px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 64px 24px;
+}
+
+.auth-card {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+
+    padding: 40px 36px 36px;
+}
+
+.auth-card .eyebrow {
+    margin-bottom: 24px;
+}
+
+.auth-card h1 {
+    font-family: 'Space Grotesk', 'Cairo', 'Noto Sans SC', 'Inter', sans-serif;
+    font-size: 27px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink-900);
+    margin-bottom: 10px;
+}
+
+.auth-card > p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--ink-500);
+    margin-bottom: 30px;
+}
+
+.auth-card .field:last-of-type {
+    margin-bottom: 24px;
+}
+
+.auth-submit {
+    width: 100%;
+    justify-content: center;
+}
+
+.auth-shell .footer-note {
+    margin-top: 0;
+}
+
+@media (max-width: 640px) {
+    .auth-shell {
+        padding: 36px 18px;
+        min-height: calc(100vh - 68px);
+    }
+    .auth-card {
+        padding: 30px 24px 26px;
+    }
+}
+
 /* ================= MAIN CONTAINER ================= */
 
 .container {
@@ -770,11 +891,40 @@ button {
     border: none;
     cursor: pointer;
     text-align: start;
+
+    transition: background 0.22s var(--ease);
 }
 
 .issue-trigger:focus-visible {
     outline: 2px solid var(--brand);
     outline-offset: -2px;
+}
+
+/* Hover: the whole row turns brand red, text/icons flip to white; moving
+   the mouse away returns it to its normal white row instantly. */
+.issue-trigger:hover {
+    background: var(--brand);
+}
+
+.issue-trigger:hover .issue-question {
+    color: #fff;
+}
+
+.issue-trigger:hover .issue-hint {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.issue-trigger:hover .issue-index {
+    background: #fff;
+    color: var(--brand);
+}
+
+.issue-trigger:hover .chevron {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.issue-trigger:hover .chevron svg {
+    color: #fff;
 }
 
 .issue-index {

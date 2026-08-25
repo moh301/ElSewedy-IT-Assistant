@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — SWE IT Assist</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="login">
+
+    <script src="js/auth.js"></script>
+
+    <div class="bg-ambient"></div>
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+        <div class="brand">
+            <img class="logo-img" src="assets/logo.gif" alt="Elsewedy Electric">
+            <div class="brand-divider"></div>
+            <div class="brand-text">
+                <span class="product-name">SWE IT Assist</span>
+                <span class="product-tag" id="productTag">IT Self-Service Portal</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="lang-switcher" id="langSwitcher"></div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN ================= -->
+    <main class="auth-shell">
+
+        <div class="auth-card fade-up">
+            <span class="eyebrow" id="authEyebrow">Employee Sign In</span>
+            <h1 id="authTitle">Welcome back</h1>
+            <p id="authSubtitle">Sign in with your Employee ID and work email to continue.</p>
+
+            <form id="loginForm" novalidate>
+                <div class="field">
+                    <label class="field-label" for="employeeId" id="employeeIdLabel">Employee ID</label>
+                    <input type="text" id="employeeId" name="employeeId" inputmode="numeric" autocomplete="off">
+                </div>
+
+                <div class="field">
+                    <label class="field-label" for="workEmail" id="emailLabel">Work email</label>
+                    <input type="email" id="workEmail" name="email" autocomplete="off">
+                    <div class="field-footer">
+                        <span class="error-msg" id="loginError"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary auth-submit" id="loginSubmit">
+                    <span id="loginSubmitLabel">Sign in</span>
+                    <span data-icon="arrowRight"></span>
+                </button>
+            </form>
+        </div>
+
+        <p class="footer-note" id="authFooterNote">Having trouble signing in? Contact the IT Service Desk on extension 2000.</p>
+
+    </main>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Translates this page's own static strings. Overrides main.js's
+        // renderCurrentPage — the single hook setLang() calls after
+        // switching languages, on every page (see chatbot/index.html for
+        // the same pattern).
+        function renderCurrentPage(code) {
+            const auth = I18N[code].auth;
+
+            setText("authEyebrow", auth.eyebrow);
+            setText("authTitle", auth.title);
+            setText("authSubtitle", auth.subtitle);
+            setText("employeeIdLabel", auth.employeeIdLabel);
+            setText("emailLabel", auth.emailLabel);
+            setText("loginSubmitLabel", auth.signIn);
+            setText("authFooterNote", auth.footerNote);
+
+            const idInput = document.getElementById("employeeId");
+            if (idInput) idInput.setAttribute("placeholder", auth.employeeIdPlaceholder);
+
+            const emailInput = document.getElementById("workEmail");
+            if (emailInput) emailInput.setAttribute("placeholder", auth.emailPlaceholder);
+
+            paintStaticIcons();
+            renderLanguageSwitcher(code);
+        }
+    </script>
+    <script src="js/login.js"></script>
+</body>
+</html>
