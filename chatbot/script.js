@@ -13,6 +13,9 @@ const sidebar =
 const sidebarToggle =
     document.getElementById("sidebar-toggle");
 
+const backButton =
+    document.getElementById("back-button");
+
 const newChatButton =
     document.getElementById("new-chat-btn");
 
@@ -497,6 +500,20 @@ sidebarToggle.addEventListener(
         sidebar.classList.toggle(
             "is-collapsed"
         );
+
+    }
+);
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+backButton.addEventListener(
+    "click",
+    function () {
+
+        window.history.back();
 
     }
 );

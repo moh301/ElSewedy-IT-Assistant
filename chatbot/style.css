@@ -114,7 +114,7 @@ input {
 
     flex-shrink: 0;
 
-    background: var(--navy);
+    background: var(--line);
 
     color: #C9D2E0;
 
@@ -314,7 +314,7 @@ input {
 
     text-transform: uppercase;
 
-    color: #6E7C96;
+    color: #000000;
 
     padding: 0 10px;
 }
@@ -351,7 +351,7 @@ input {
 
     cursor: pointer;
 
-    color: #C9D2E0;
+    color: #000000;
 
     transition:
         background 0.15s ease;
@@ -593,6 +593,20 @@ input {
 }
 
 
+/* NEW: GROUP FOR BACK + SIDEBAR */
+
+.header-buttons {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+
 .sidebar-toggle {
 
     width: 36px;
@@ -618,13 +632,20 @@ input {
     flex-shrink: 0;
 
     transition:
-        background 0.15s ease;
+        background 0.15s ease,
+        transform 0.1s ease;
 }
 
 
 .sidebar-toggle:hover {
 
     background: var(--surface);
+}
+
+
+.sidebar-toggle:active {
+
+    transform: scale(0.95);
 }
 
 
@@ -1216,4 +1237,17 @@ input {
         font-size: 14px;
     }
 
+}
+
+.brand-mark {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.brand-logo {
+    width: 50px;
+    height: 50px;
+    display: block;
+    object-fit: contain;
 }
