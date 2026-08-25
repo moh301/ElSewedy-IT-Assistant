@@ -94,7 +94,7 @@
 
 
         <!-- =================================================
-             PINNED ISSUES
+             PINNED ISSUES (STATIC — DO NOT MODIFY VIA JS)
         ================================================== -->
 
         <div class="history-section">
@@ -303,7 +303,7 @@
 
 
         <!-- =================================================
-             RECENT
+             RECENT (DYNAMIC — POPULATED BY script.js FROM localStorage)
         ================================================== -->
 
         <div
@@ -320,179 +320,10 @@
                 id="recent-history"
             >
 
-                <li class="history-item">
+                <!-- Recent chat sessions are injected here dynamically -->
 
-                    <svg
-                        class="history-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-
-                        <path
-                            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                        ></path>
-
-                    </svg>
-
-
-                    <span class="history-title">
-                        Outlook not syncing
-                    </span>
-
-
-                    <button
-                        class="pin-btn"
-                        type="button"
-                        aria-label="Pin chat"
-                    >
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                        >
-
-                            <path
-                                d="M16 3l5 5-5.5 5.5L17 17l-5 5-2-6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"
-                            ></path>
-
-                        </svg>
-
-                    </button>
-
-                </li>
-
-
-                <li class="history-item">
-
-                    <svg
-                        class="history-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-
-                        <path
-                            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                        ></path>
-
-                    </svg>
-
-
-                    <span class="history-title">
-                        Wi-Fi keeps dropping
-                    </span>
-
-
-                    <button
-                        class="pin-btn"
-                        type="button"
-                        aria-label="Pin chat"
-                    >
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                        >
-
-                            <path
-                                d="M16 3l5 5-5.5 5.5L17 17l-5 5-2-6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"
-                            ></path>
-
-                        </svg>
-
-                    </button>
-
-                </li>
-
-
-                <li class="history-item">
-
-                    <svg
-                        class="history-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-
-                        <path
-                            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                        ></path>
-
-                    </svg>
-
-
-                    <span class="history-title">
-                        Reset domain password
-                    </span>
-
-
-                    <button
-                        class="pin-btn"
-                        type="button"
-                        aria-label="Pin chat"
-                    >
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                        >
-
-                            <path
-                                d="M16 3l5 5-5.5 5.5L17 17l-5 5-2-6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"
-                            ></path>
-
-                        </svg>
-
-                    </button>
-
-                </li>
-
-
-                <li class="history-item">
-
-                    <svg
-                        class="history-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-
-                        <path
-                            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2 2h14a2 2 0 0 1 2 2z"
-                        ></path>
-
-                    </svg>
-
-
-                    <span class="history-title">
-                        Printer offline on 3rd floor
-                    </span>
-
-
-                    <button
-                        class="pin-btn"
-                        type="button"
-                        aria-label="Pin chat"
-                    >
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                        >
-
-                            <path
-                                d="M16 3l5 5-5.5 5.5L17 17l-5 5-2 6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"
-                            ></path>
-
-                        </svg>
-
-                    </button>
-
+                <li class="history-empty" id="recent-empty">
+                    No recent chats yet
                 </li>
 
             </ul>

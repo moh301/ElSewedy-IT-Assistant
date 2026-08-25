@@ -19,6 +19,149 @@ const backButton =
 const newChatButton =
     document.getElementById("new-chat-btn");
 
+const recentHistoryList =
+    document.getElementById("recent-history");
+
+
+/* =========================================================
+   WELCOME MESSAGE (used to reset chat-box)
+========================================================= */
+
+const WELCOME_HTML = `
+    <div class="message bot-message">
+
+        <div class="bot-heading">
+            Welcome to SWE IT Assist
+        </div>
+
+        Hello! How can I help you today?
+
+    </div>
+`;
+
+
+/* =========================================================
+   CHAT HISTORY STATE (localStorage)
+========================================================= */
+
+const STORAGE_KEY = "swe_it_assist_sessions";
+
+/*
+   In-memory cache of all sessions.
+   Each session:
+   {
+       id: string,
+       title: string,
+       timestamp: number,
+       messages: [ { role, text, timestamp } ]
+   }
+*/
+
+let sessions = [];
+
+
+/*
+   ID of the session currently being viewed.
+   null = a fresh / unsaved "New Chat".
+*/
+
+let currentSessionId = null;
+
+
+function loadSessionsFromStorage() {
+
+    try {
+
+        const raw =
+            localStorage.getItem(STORAGE_KEY);
+
+        const parsed =
+            raw ? JSON.parse(raw) : [];
+
+        sessions =
+            Array.isArray(parsed)
+                ? parsed
+                : [];
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load chat history:",
+            error
+        );
+
+        sessions = [];
+
+    }
+}
+
+
+function saveSessionsToStorage() {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(sessions)
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Failed to save chat history:",
+            error
+        );
+
+    }
+}
+
+
+function getSessionById(id) {
+
+    return sessions.find(
+        session => session.id === id
+    );
+}
+
+
+function generateSessionId() {
+
+    if (
+        window.crypto &&
+        typeof window.crypto.randomUUID === "function"
+    ) {
+
+        return window.crypto.randomUUID();
+
+    }
+
+    return (
+        "session-" +
+        Date.now() +
+        "-" +
+        Math.random().toString(16).slice(2)
+    );
+}
+
+
+function generateTitle(text) {
+
+    const clean =
+        text.trim().replace(/\s+/g, " ");
+
+    const MAX_LEN = 34;
+
+    if (clean.length <= MAX_LEN) {
+
+        return clean;
+
+    }
+
+    return (
+        clean.slice(0, MAX_LEN).trim() + "…"
+    );
+}
+
 
 /* =========================================================
    SCROLL
@@ -127,7 +270,7 @@ function formatBotMessage(text) {
 
 
 /* =========================================================
-   ADD MESSAGE
+   ADD MESSAGE (renders to DOM only)
 ========================================================= */
 
 function addMessage(
@@ -257,6 +400,339 @@ function removeThinking() {
 
 
 /* =========================================================
+   RENDER RECENT SIDEBAR LIST
+========================================================= */
+
+function renderRecentList() {
+
+    /*
+       Clear existing items.
+    */
+
+    recentHistoryList.innerHTML = "";
+
+
+    if (
+        !sessions ||
+        sessions.length === 0
+    ) {
+
+        const emptyItem =
+            document.createElement("li");
+
+        emptyItem.className =
+            "history-empty";
+
+        emptyItem.id =
+            "recent-empty";
+
+        emptyItem.textContent =
+            "No recent chats yet";
+
+        recentHistoryList.appendChild(
+            emptyItem
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Newest first — sessions array
+       is always kept newest-first
+       via prepend on creation.
+    */
+
+    sessions.forEach(session => {
+
+        const item =
+            document.createElement("li");
+
+        item.className =
+            "history-item";
+
+        item.dataset.sessionId =
+            session.id;
+
+        if (
+            session.id === currentSessionId
+        ) {
+
+            item.classList.add(
+                "is-active"
+            );
+
+        }
+
+
+        item.innerHTML = `
+
+            <svg
+                class="history-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+
+                <path
+                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                ></path>
+
+            </svg>
+
+
+            <span class="history-title">
+                ${escapeHtml(session.title)}
+            </span>
+
+        `;
+
+
+        item.addEventListener(
+            "click",
+            function () {
+
+                switchToSession(
+                    session.id
+                );
+
+            }
+        );
+
+
+        recentHistoryList.appendChild(
+            item
+        );
+
+    });
+
+}
+
+
+function escapeHtml(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+
+/* =========================================================
+   SWITCH TO AN EXISTING SESSION
+========================================================= */
+
+function switchToSession(sessionId) {
+
+    const session =
+        getSessionById(sessionId);
+
+
+    if (!session) {
+
+        return;
+
+    }
+
+
+    currentSessionId =
+        session.id;
+
+
+    /*
+       Clear current view.
+    */
+
+    chatBox.innerHTML = "";
+
+
+    /*
+       Render all stored messages
+       for this session.
+    */
+
+    session.messages.forEach(msg => {
+
+        addMessage(
+            msg.text,
+            msg.role
+        );
+
+    });
+
+
+    /*
+       Update active states
+       across both pinned + recent
+       (pinned items represent
+       template shortcuts, not
+       sessions, so just clear them).
+    */
+
+    document
+        .querySelectorAll(
+            ".pinned-chat"
+        )
+        .forEach(i => {
+
+            i.classList.remove(
+                "is-active"
+            );
+
+        });
+
+
+    renderRecentList();
+
+}
+
+
+/* =========================================================
+   START A NEW SESSION (persist first message)
+========================================================= */
+
+function createNewSession(
+    firstMessageText
+) {
+
+    const newSession = {
+
+        id: generateSessionId(),
+
+        title: generateTitle(
+            firstMessageText
+        ),
+
+        timestamp: Date.now(),
+
+        messages: []
+
+    };
+
+
+    /*
+       Prepend to top
+       of RECENT list —
+       array stays newest-first.
+    */
+
+    sessions = [
+        newSession,
+        ...sessions
+    ];
+
+    currentSessionId =
+        newSession.id;
+
+
+    saveSessionsToStorage();
+
+
+    /*
+       Immediately reflect
+       in the sidebar —
+       this is what removes
+       "No recent chats yet"
+       and shows the new item
+       right away.
+    */
+
+    renderRecentList();
+
+
+    return newSession;
+
+}
+
+
+function ensureActiveSession(
+    firstMessageText
+) {
+
+    if (currentSessionId) {
+
+        const existing =
+            getSessionById(
+                currentSessionId
+            );
+
+        if (existing) {
+
+            return existing;
+
+        }
+
+        /*
+           currentSessionId pointed
+           at a session that no
+           longer exists in storage —
+           fall through and create
+           a fresh one instead.
+        */
+
+        currentSessionId = null;
+
+    }
+
+
+    return createNewSession(
+        firstMessageText
+    );
+
+}
+
+
+function persistMessage(
+    role,
+    text
+) {
+
+    try {
+
+        const session =
+            ensureActiveSession(text);
+
+        if (!session) {
+
+            return;
+
+        }
+
+        session.messages.push({
+
+            role,
+            text,
+            timestamp: Date.now()
+
+        });
+
+        saveSessionsToStorage();
+
+        /*
+           Keep the sidebar's title/
+           active highlighting in sync
+           on every message, not just
+           the first one.
+        */
+
+        renderRecentList();
+
+    } catch (error) {
+
+        console.error(
+            "Failed to persist chat message:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    SEND MESSAGE
 ========================================================= */
 
@@ -296,6 +772,20 @@ async function sendMessage(
     addMessage(
         message,
         "user"
+    );
+
+
+    /*
+       Persist user message
+       (creates a new session
+       + prepends to RECENT
+       if this is the first
+       message of a new chat).
+    */
+
+    persistMessage(
+        "user",
+        message
     );
 
 
@@ -395,11 +885,24 @@ async function sendMessage(
                 "bot"
             );
 
+            persistMessage(
+                "bot",
+                data.response
+            );
+
         } else {
 
+            const fallback =
+                "I couldn't get a response from the AI. Please try again.";
+
             addMessage(
-                "I couldn't get a response from the AI. Please try again.",
+                fallback,
                 "bot"
+            );
+
+            persistMessage(
+                "bot",
+                fallback
             );
 
         }
@@ -425,9 +928,17 @@ async function sendMessage(
            Friendly error.
         */
 
+        const errorMessage =
+            "I couldn't connect to the AI right now. Please check that the IT Assist server is running and try again.";
+
         addMessage(
-            "I couldn't connect to the AI right now. Please check that the IT Assist server is running and try again.",
+            errorMessage,
             "bot"
+        );
+
+        persistMessage(
+            "bot",
+            errorMessage
         );
 
 
@@ -529,31 +1040,28 @@ newChatButton.addEventListener(
 
 
         /*
-           Clear chat.
+           Reset active session context.
         */
 
-        chatBox.innerHTML = `
-
-            <div class="message bot-message">
-
-                <div class="bot-heading">
-                    Welcome to SWE IT Assist
-                </div>
-
-                Hello! How can I help you today?
-
-            </div>
-
-        `;
+        currentSessionId = null;
 
 
         /*
-           Remove active states.
+           Clear chat.
+        */
+
+        chatBox.innerHTML =
+            WELCOME_HTML;
+
+
+        /*
+           Remove active states
+           from pinned shortcuts.
         */
 
         document
             .querySelectorAll(
-                ".history-item"
+                ".pinned-chat"
             )
             .forEach(
                 item => {
@@ -567,6 +1075,14 @@ newChatButton.addEventListener(
 
 
         /*
+           Remove active states
+           from recent sessions.
+        */
+
+        renderRecentList();
+
+
+        /*
            Focus input.
         */
 
@@ -577,7 +1093,9 @@ newChatButton.addEventListener(
 
 
 /* =========================================================
-   PINNED ISSUES
+   PINNED ISSUES (static shortcuts — always start
+   a fresh session context, never persisted as
+   editable pinned entries themselves)
 ========================================================= */
 
 document
@@ -632,6 +1150,20 @@ document
 
 
                     /*
+                       A pinned shortcut always
+                       starts a brand-new session
+                       context so it doesn't
+                       append onto whatever
+                       chat was open before.
+                    */
+
+                    currentSessionId = null;
+
+                    chatBox.innerHTML =
+                        WELCOME_HTML;
+
+
+                    /*
                        Send message.
                     */
 
@@ -647,108 +1179,13 @@ document
 
 
 /* =========================================================
-   RECENT CHAT ITEMS
+   INIT — load persisted sessions
+   and populate RECENT sidebar
 ========================================================= */
 
-document
-    .querySelectorAll(
-        "#recent-history .history-item"
-    )
-    .forEach(
-        item => {
+loadSessionsFromStorage();
 
-            item.addEventListener(
-                "click",
-                function () {
-
-
-                    /*
-                       Don't activate
-                       when clicking pin.
-                    */
-
-                    document
-                        .querySelectorAll(
-                            "#recent-history .history-item"
-                        )
-                        .forEach(
-                            i => {
-
-                                i.classList.remove(
-                                    "is-active"
-                                );
-
-                            }
-                        );
-
-
-                    this.classList.add(
-                        "is-active"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   PIN BUTTONS
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".pin-btn"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function (event) {
-
-
-                    /*
-                       Prevent history item
-                       from being selected.
-                    */
-
-                    event.stopPropagation();
-
-
-                    /*
-                       Toggle pin.
-                    */
-
-                    this.classList.toggle(
-                        "is-active"
-                    );
-
-
-                    /*
-                       Toggle pinned state.
-                    */
-
-                    const item =
-                        this.closest(
-                            ".history-item"
-                        );
-
-
-                    if (item) {
-
-                        item.classList.toggle(
-                            "is-pinned"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
+renderRecentList();
 
 
 /* =========================================================
