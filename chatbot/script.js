@@ -1,129 +1,741 @@
-const input = document.getElementById("message-input");
-const sendButton = document.getElementById("send-button");
-const chatBox = document.getElementById("chat-box");
+const input =
+    document.getElementById("message-input");
 
-// The Python backend (chatbot-backend/main.py) must be running for this to
-// work — it's a separate local server from the PHP one, listening on
-// port 8000 by default. See chatbot-backend/README.md.
-const CHAT_ENDPOINT = "http://127.0.0.1:8000/chat";
+const sendButton =
+    document.getElementById("send-button");
 
-const SESSION_STORAGE_KEY = "swe_it_chat_session";
+const chatBox =
+    document.getElementById("chat-box");
 
-// A per-tab session id so the backend keeps each visitor's conversation
-// separate instead of mixing every user's chat into one shared history.
-// Persisted in sessionStorage so a page reload keeps the same
-// conversation; a new tab (or "New Chat") gets a fresh one.
-let sessionId = sessionStorage.getItem(SESSION_STORAGE_KEY);
-if (!sessionId) {
-    sessionId = crypto.randomUUID();
-    sessionStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+const sidebar =
+    document.getElementById("sidebar");
+
+const sidebarToggle =
+    document.getElementById("sidebar-toggle");
+
+const newChatButton =
+    document.getElementById("new-chat-btn");
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollToBottom() {
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
 }
 
-// Exposed so the "New Chat" button (wired up in index.html) can start a
-// fresh conversation on the backend instead of continuing the old one.
-window.resetChatSession = function resetChatSession() {
-    sessionId = crypto.randomUUID();
-    sessionStorage.setItem(SESSION_STORAGE_KEY, sessionId);
-};
+
+/* =========================================================
+   FORMAT GEMINI RESPONSE
+========================================================= */
+
+function formatBotMessage(text) {
+
+    if (!text) {
+        return "";
+    }
 
 
-function addMessage(message, sender) {
+    /*
+       Escape HTML first
+       to prevent Gemini text
+       from injecting HTML.
+    */
 
-    const messageDiv = document.createElement("div");
+    let html = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
-    messageDiv.classList.add("message");
+
+    /*
+       Bold
+       **text**
+    */
+
+    html = html.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+
+    /*
+       Headings
+       ### Heading
+    */
+
+    html = html.replace(
+        /^###\s*(.+)$/gm,
+        '<div class="bot-heading">$1</div>'
+    );
+
+
+    html = html.replace(
+        /^##\s*(.+)$/gm,
+        '<div class="bot-heading bot-heading-large">$1</div>'
+    );
+
+
+    /*
+       Numbered list
+       1. Something
+    */
+
+    html = html.replace(
+        /^\s*(\d+)\.\s+(.+)$/gm,
+        '<div class="bot-list-item">' +
+        '<span class="list-number">$1.</span>' +
+        '<span>$2</span>' +
+        '</div>'
+    );
+
+
+    /*
+       Bullet list
+       - Something
+       * Something
+    */
+
+    html = html.replace(
+        /^\s*[-*]\s+(.+)$/gm,
+        '<div class="bot-list-item">' +
+        '<span class="list-bullet">•</span>' +
+        '<span>$1</span>' +
+        '</div>'
+    );
+
+
+    /*
+       New lines
+    */
+
+    html =
+        html.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+    return html;
+}
+
+
+/* =========================================================
+   ADD MESSAGE
+========================================================= */
+
+function addMessage(
+    message,
+    sender
+) {
+
+    const messageDiv =
+        document.createElement("div");
+
+
+    messageDiv.classList.add(
+        "message"
+    );
+
 
     if (sender === "user") {
-        messageDiv.classList.add("user-message");
+
+        messageDiv.classList.add(
+            "user-message"
+        );
+
+
+        /*
+           User message
+           stays plain text
+        */
+
+        messageDiv.textContent =
+            message;
+
     } else {
-        messageDiv.classList.add("bot-message");
+
+        messageDiv.classList.add(
+            "bot-message"
+        );
+
+
+        /*
+           Gemini response
+           gets formatted
+        */
+
+        messageDiv.innerHTML =
+            formatBotMessage(message);
+
     }
 
-    messageDiv.textContent = message;
 
-    chatBox.appendChild(messageDiv);
+    chatBox.appendChild(
+        messageDiv
+    );
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+
+    scrollToBottom();
 }
 
 
-async function sendMessage() {
+/* =========================================================
+   THINKING
+========================================================= */
 
-    const message = input.value.trim();
+function showThinking() {
 
-    if (message === "") {
+    removeThinking();
+
+
+    const thinkingDiv =
+        document.createElement("div");
+
+
+    thinkingDiv.id =
+        "thinking-message";
+
+
+    thinkingDiv.classList.add(
+        "message",
+        "bot-message",
+        "thinking-message"
+    );
+
+
+    thinkingDiv.innerHTML = `
+
+        <span>
+            Thinking
+        </span>
+
+        <div class="thinking-dots">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+    `;
+
+
+    chatBox.appendChild(
+        thinkingDiv
+    );
+
+
+    scrollToBottom();
+}
+
+
+/* =========================================================
+   REMOVE THINKING
+========================================================= */
+
+function removeThinking() {
+
+    const thinking =
+        document.getElementById(
+            "thinking-message"
+        );
+
+
+    if (thinking) {
+
+        thinking.remove();
+
+    }
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendMessage(
+    customMessage = null
+) {
+
+
+    /*
+       If customMessage exists,
+       use it.
+
+       Otherwise use input.
+    */
+
+    const message =
+        customMessage !== null
+            ? customMessage
+            : input.value.trim();
+
+
+    /*
+       Don't send empty message.
+    */
+
+    if (!message) {
+
         return;
+
     }
 
-    // Add user's message
-    addMessage(message, "user");
 
-    // Clear input
+    /*
+       Add user message.
+    */
+
+    addMessage(
+        message,
+        "user"
+    );
+
+
+    /*
+       Clear input.
+    */
+
     input.value = "";
+
+
+    /*
+       Show thinking.
+    */
+
+    showThinking();
+
+
+    /*
+       Disable send button.
+    */
+
     sendButton.disabled = true;
+
 
     try {
 
-        const response = await fetch(CHAT_ENDPOINT, {
 
-            method: "POST",
+        /* =================================================
+           FASTAPI
+        ================================================= */
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+        const response =
+            await fetch(
+                "http://127.0.0.1:8000/chat",
+                {
 
-            body: JSON.stringify({
-                message: message,
-                session_id: sessionId,
-                // Set by ../js/main.js (applyDocumentDirection) whenever the
-                // language switcher is used — tells the backend which
-                // language to have Gemini reply in.
-                language: document.documentElement.getAttribute("lang") || "en"
-            })
+                    method: "POST",
 
-        });
+                    headers: {
 
-        const data = await response.json();
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                message
+
+                        })
+
+                }
+            );
+
+
+        /*
+           Check HTTP status.
+        */
 
         if (!response.ok) {
-            throw new Error(data.detail || `Request failed with status ${response.status}`);
+
+            throw new Error(
+                `Server error: ${response.status}`
+            );
+
         }
 
-        // Stay in sync with whatever session id the backend is using
-        // (covers the first-ever request, before one was assigned).
-        if (data.session_id) {
-            sessionId = data.session_id;
-            sessionStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+
+        /*
+           Convert to JSON.
+        */
+
+        const data =
+            await response.json();
+
+
+        /*
+           Remove thinking.
+        */
+
+        removeThinking();
+
+
+        /*
+           Gemini response.
+        */
+
+        if (
+            data &&
+            data.response
+        ) {
+
+            addMessage(
+                data.response,
+                "bot"
+            );
+
+        } else {
+
+            addMessage(
+                "I couldn't get a response from the AI. Please try again.",
+                "bot"
+            );
+
         }
 
-        // Add Gemini response
-        addMessage(data.response, "bot");
 
     } catch (error) {
 
-        console.error(error);
 
-        const code = document.documentElement.getAttribute("lang") || "en";
-        // I18N is declared with `const` in ../js/i18n.js, which does NOT
-        // attach it to `window` — reference it directly, guarded with
-        // typeof so this still works if that script somehow didn't load.
-        const fallback = (typeof I18N !== "undefined" && I18N[code] && I18N[code].chat.errorFallback) ||
-            "Sorry, something went wrong. Make sure the chatbot backend is running, then try again.";
-        addMessage(fallback, "bot");
+        console.error(
+            "Chat error:",
+            error
+        );
+
+
+        /*
+           Remove thinking.
+        */
+
+        removeThinking();
+
+
+        /*
+           Friendly error.
+        */
+
+        addMessage(
+            "I couldn't connect to the AI right now. Please check that the IT Assist server is running and try again.",
+            "bot"
+        );
+
 
     } finally {
-        sendButton.disabled = false;
+
+
+        /*
+           Enable button.
+        */
+
+        sendButton.disabled =
+            false;
+
+
+        /*
+           Focus input.
+        */
+
+        input.focus();
+
     }
+
 }
 
 
-sendButton.addEventListener("click", sendMessage);
+/* =========================================================
+   SEND BUTTON
+========================================================= */
 
+sendButton.addEventListener(
+    "click",
+    function () {
 
-input.addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
         sendMessage();
-    }
 
-});
+    }
+);
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+input.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SIDEBAR TOGGLE
+========================================================= */
+
+sidebarToggle.addEventListener(
+    "click",
+    function () {
+
+        sidebar.classList.toggle(
+            "is-collapsed"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   NEW CHAT
+========================================================= */
+
+newChatButton.addEventListener(
+    "click",
+    function () {
+
+
+        /*
+           Clear chat.
+        */
+
+        chatBox.innerHTML = `
+
+            <div class="message bot-message">
+
+                <div class="bot-heading">
+                    Welcome to SWE IT Assist
+                </div>
+
+                Hello! How can I help you today?
+
+            </div>
+
+        `;
+
+
+        /*
+           Remove active states.
+        */
+
+        document
+            .querySelectorAll(
+                ".history-item"
+            )
+            .forEach(
+                item => {
+
+                    item.classList.remove(
+                        "is-active"
+                    );
+
+                }
+            );
+
+
+        /*
+           Focus input.
+        */
+
+        input.focus();
+
+    }
+);
+
+
+/* =========================================================
+   PINNED ISSUES
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".pinned-chat"
+    )
+    .forEach(
+        item => {
+
+            item.addEventListener(
+                "click",
+                function () {
+
+
+                    /*
+                       Get predefined message.
+                    */
+
+                    const message =
+                        this.getAttribute(
+                            "data-message"
+                        );
+
+
+                    /*
+                       Remove active
+                       from other pinned items.
+                    */
+
+                    document
+                        .querySelectorAll(
+                            ".pinned-chat"
+                        )
+                        .forEach(
+                            i => {
+
+                                i.classList.remove(
+                                    "is-active"
+                                );
+
+                            }
+                        );
+
+
+                    /*
+                       Activate selected item.
+                    */
+
+                    this.classList.add(
+                        "is-active"
+                    );
+
+
+                    /*
+                       Send message.
+                    */
+
+                    sendMessage(
+                        message
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   RECENT CHAT ITEMS
+========================================================= */
+
+document
+    .querySelectorAll(
+        "#recent-history .history-item"
+    )
+    .forEach(
+        item => {
+
+            item.addEventListener(
+                "click",
+                function () {
+
+
+                    /*
+                       Don't activate
+                       when clicking pin.
+                    */
+
+                    document
+                        .querySelectorAll(
+                            "#recent-history .history-item"
+                        )
+                        .forEach(
+                            i => {
+
+                                i.classList.remove(
+                                    "is-active"
+                                );
+
+                            }
+                        );
+
+
+                    this.classList.add(
+                        "is-active"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   PIN BUTTONS
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".pin-btn"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function (event) {
+
+
+                    /*
+                       Prevent history item
+                       from being selected.
+                    */
+
+                    event.stopPropagation();
+
+
+                    /*
+                       Toggle pin.
+                    */
+
+                    this.classList.toggle(
+                        "is-active"
+                    );
+
+
+                    /*
+                       Toggle pinned state.
+                    */
+
+                    const item =
+                        this.closest(
+                            ".history-item"
+                        );
+
+
+                    if (item) {
+
+                        item.classList.toggle(
+                            "is-pinned"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   INITIAL FOCUS
+========================================================= */
+
+input.focus();
