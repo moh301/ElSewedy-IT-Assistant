@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWE IT Assist</title>
+<link rel="stylesheet" href="style.css">
+<style>
+    /* RTL mirroring for Arabic — the chat bubbles and sidebar icons should
+       flip sides along with the rest of the site. */
+    html[dir="rtl"] .bot-message { margin-right: max(24px, calc(50% - 340px)); margin-left: auto; border-bottom-left-radius: 16px; border-bottom-right-radius: 4px; }
+    html[dir="rtl"] .user-message { margin-left: max(24px, calc(50% - 340px)); margin-right: auto; border-bottom-right-radius: 16px; border-bottom-left-radius: 4px; }
+    html[dir="rtl"] .portal-back svg { transform: scaleX(-1); }
+</style>
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+
+      <div class="sidebar-brand">
+        <div class="brand-logo-chip">
+          <img src="../assets/logo.gif" alt="Elsewedy Electric" class="brand-logo-img">
+        </div>
+        <span class="brand-product" id="brandProductLabel">IT Assist</span>
+      </div>
+
+      <button id="new-chat-btn" class="new-chat-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span id="newChatLabel">New Chat</span>
+      </button>
+
+      <div class="history-section">
+        <span class="history-label" id="pinnedLabel">Pinned</span>
+        <ul class="history-list" id="pinned-history">
+          <li class="history-item is-pinned">
+            <svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span class="history-title" id="historyTitle0">VPN setup on laptop</span>
+            <button class="pin-btn is-active" type="button" aria-label="Unpin chat">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3l5 5-5.5 5.5L17 17l-5 5-2-6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"></path></svg>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="history-section history-section--scroll">
+        <span class="history-label" id="recentLabel">Recent</span>
+        <ul class="history-list" id="recent-history">
+          <li class="history-item is-active">
+            <svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span class="history-title" id="historyTitle1">Outlook not syncing</span>
+            <button class="pin-btn" type="button" aria-label="Pin chat">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3l5 5-5.5 5.5L17 17l-5 5-2-6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"></path></svg>
+            </button>
+          </li>
+          <li class="history-item">
+            <svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span class="history-title" id="historyTitle2">Wi-Fi keeps dropping</span>
+            <button class="pin-btn" type="button" aria-label="Pin chat">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3l5 5-5.5 5.5L17 17l-5 5-2-6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"></path></svg>
+            </button>
+          </li>
+          <li class="history-item">
+            <svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span class="history-title" id="historyTitle3">Reset domain password</span>
+            <button class="pin-btn" type="button" aria-label="Pin chat">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3l5 5-5.5 5.5L17 17l-5 5-2-6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"></path></svg>
+            </button>
+          </li>
+          <li class="history-item">
+            <svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span class="history-title" id="historyTitle4">Printer offline on 3rd floor</span>
+            <button class="pin-btn" type="button" aria-label="Pin chat">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3l5 5-5.5 5.5L17 17l-5 5-2-6-5 5v-2l5-5-6-2 5-5 3.5 1.5L16 3z"></path></svg>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="status-pill">
+          <span class="pulse-dot"></span>
+          <span id="systemActiveLabel">24/7 AI System Active</span>
+        </div>
+        <div class="user-chip">
+          <span class="user-avatar">A</span>
+          <span class="user-name">Ahmed Hassan</span>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ===== MAIN WORKSPACE ===== -->
+    <main class="workspace">
+
+      <header class="workspace-header">
+        <button id="sidebar-toggle" class="sidebar-toggle" type="button" aria-label="Toggle sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+            <line x1="9" y1="4" x2="9" y2="20"></line>
+          </svg>
+        </button>
+        <a href="../index.html" class="portal-back" id="portalBackLink" aria-label="Back to IT Self-Service Portal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5"></path>
+            <path d="m12 19-7-7 7-7"></path>
+          </svg>
+        </a>
+        <div class="workspace-title">
+          <h1>SWE IT Assist</h1>
+          <span id="onlineNowLabel">Online now</span>
+        </div>
+        <div class="lang-switcher" id="langSwitcher"></div>
+        <div class="workspace-status">
+          <span class="pulse-dot pulse-dot--sm"></span>
+          <span id="activeStatusLabel">Active</span>
+        </div>
+      </header>
+
+      <div id="chat-box" class="chat-box">
+        <div class="message bot-message" id="chatGreeting">
+          Hello! How can I help you?
+        </div>
+      </div>
+
+      <div class="composer">
+        <div class="composer-inner">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Message SWE IT Assist..."
+            autocomplete="off"
+          >
+          <button id="send-button" aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+        <span class="composer-hint" id="composerHint">SWE IT Assist can make mistakes. Verify critical steps with the IT helpdesk.</span>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- i18n.js + main.js are shared with the rest of the site, purely for
+       their language machinery (I18N data, detectInitialLang, setLang,
+       applyDocumentDirection, renderLanguageSwitcher, icon helpers). Their
+       own page-render functions (renderIndexPage/renderCategoryPage) are
+       no-ops here since document.body has no matching data-page — see the
+       renderCurrentPage override below, which is what those functions
+       actually call to refresh the page on every language change. -->
+  <script src="../js/i18n.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Translates every static string on this page into the given
+    // language and refreshes the language switcher widget. Overrides
+    // main.js's own renderCurrentPage — that's the single hook setLang()
+    // calls after switching languages, on every page.
+    function renderCurrentPage(code) {
+      const chat = I18N[code].chat;
+
+      setText("brandProductLabel", chat.product);
+      setText("newChatLabel", chat.newChat);
+      setText("pinnedLabel", chat.pinnedLabel);
+      setText("recentLabel", chat.recentLabel);
+      chat.historyItems.forEach((title, i) => setText(`historyTitle${i}`, title));
+      setText("systemActiveLabel", chat.systemActive);
+      setText("onlineNowLabel", chat.onlineNow);
+      setText("activeStatusLabel", chat.active);
+      setText("composerHint", chat.hint);
+
+      const input = document.getElementById("message-input");
+      if (input) input.setAttribute("placeholder", chat.placeholder);
+
+      const backLink = document.getElementById("portalBackLink");
+      if (backLink) backLink.setAttribute("aria-label", chat.backAria);
+
+      // Only replace the greeting bubble while it's still the sole,
+      // untouched message — once a real conversation is underway this
+      // would otherwise wipe it out on every language switch.
+      const chatBox = document.getElementById("chat-box");
+      const greeting = document.getElementById("chatGreeting");
+      if (greeting && chatBox && chatBox.children.length === 1) {
+        greeting.textContent = chat.greeting;
+      }
+
+      renderLanguageSwitcher(code);
+    }
+  </script>
+  <script>
+    // Sidebar + pin interactions — kept separate from script.js's messaging logic
+    (function () {
+      const sidebar = document.querySelector(".sidebar");
+      const sidebarToggle = document.getElementById("sidebar-toggle");
+      const newChatBtn = document.getElementById("new-chat-btn");
+      const chatBox = document.getElementById("chat-box");
+
+      sidebarToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("is-collapsed");
+      });
+
+      newChatBtn.addEventListener("click", () => {
+        const code = detectInitialLang();
+        const greetingText = I18N[code].chat.greeting;
+        chatBox.innerHTML = `<div class="message bot-message" id="chatGreeting">${escapeHTML(greetingText)}</div>`;
+        document.querySelectorAll(".history-item").forEach((item) => item.classList.remove("is-active"));
+        // Also start a fresh conversation on the backend, not just clear
+        // the screen — otherwise "New Chat" would still send the old
+        // conversation's history with the next message.
+        if (window.resetChatSession) window.resetChatSession();
+      });
+
+      document.querySelectorAll(".pin-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          btn.classList.toggle("is-active");
+          const item = btn.closest(".history-item");
+          if (item) item.classList.toggle("is-pinned");
+        });
+      });
+
+      document.querySelectorAll(".history-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          document.querySelectorAll(".history-item").forEach((i) => i.classList.remove("is-active"));
+          item.classList.add("is-active");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

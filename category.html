@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWE IT Assist</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="category">
+
+    <div class="bg-ambient"></div>
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+        <div class="brand">
+            <img class="logo-img" src="assets/logo.gif" alt="Elsewedy Electric">
+            <div class="brand-divider"></div>
+            <div class="brand-text">
+                <span class="product-name">SWE IT Assist</span>
+                <span class="product-tag" id="productTag">IT Self-Service Portal</span>
+            </div>
+        </div>
+
+        <div class="header-search">
+            <div class="header-search-box">
+                <span class="header-search-icon" data-icon="search"></span>
+                <input type="search" id="headerSearch" class="header-search-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="lang-switcher" id="langSwitcher"></div>
+            <a class="back-link" href="index.html">
+                <span class="back-arrow" data-icon="arrowLeft"></span>
+                <span id="backLabel">All categories</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- ================= MAIN ================= -->
+    <main class="container">
+
+        <nav class="breadcrumbs fade-up">
+            <a href="index.html" id="crumbHome">Home</a>
+            <span class="sep">/</span>
+            <span class="current" id="crumbCurrent">Category</span>
+        </nav>
+
+        <section class="page-head fade-up">
+            <div>
+                <div class="page-icon-badge" id="pageIconBadge"></div>
+            </div>
+            <span class="progress-pill" id="issueCount"></span>
+        </section>
+
+        <section class="hero fade-up" style="margin-bottom:0;">
+            <h1 id="pageTitle" style="font-size:36px;">Category</h1>
+            <p id="pageSubtitle">Loading…</p>
+        </section>
+
+        <!-- ================= ISSUE ACCORDION ================= -->
+        <section class="issue-list" id="issueList"></section>
+        <p class="search-empty" id="searchEmpty" hidden></p>
+
+        <!-- ================= OTHER / CUSTOM DESCRIPTION ================= -->
+        <section class="other-section fade-up" id="otherSection">
+            <div class="other-head">
+                <div class="other-icon" data-icon="edit"></div>
+                <div>
+                    <div class="other-title" id="otherTitle">Still need help?</div>
+                    <div class="other-desc" id="otherDesc">Loading…</div>
+                </div>
+            </div>
+
+            <form id="otherForm" novalidate>
+                <div class="field">
+                    <label class="field-label" for="otherDetails" id="otherLabel">Other — describe your issue</label>
+                    <textarea id="otherDetails" name="details" required></textarea>
+                    <div class="field-footer">
+                        <span class="error-msg" id="otherError"></span>
+                        <span class="char-count" id="charCount">0 / 800</span>
+                    </div>
+                </div>
+
+                <div class="submit-row">
+                    <span class="error-msg" id="otherSubmitError"></span>
+                    <button type="submit" class="btn btn-primary" id="otherSubmit">
+                        <span data-icon="send"></span>
+                        <span id="submitLabel">Submit request</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="success-panel" id="otherSuccess" tabindex="-1">
+                <div class="success-icon" data-icon="check"></div>
+                <div>
+                    <div class="success-title" id="successTitle">Request submitted</div>
+                    <div class="success-desc" id="successDesc">Thanks — a member of the IT team will reach out to you shortly.</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

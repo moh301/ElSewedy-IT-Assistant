@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWE IT Assist</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="index">
+
+    <div class="bg-ambient"></div>
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+        <div class="brand">
+            <img class="logo-img" src="assets/logo.gif" alt="Elsewedy Electric">
+            <div class="brand-divider"></div>
+            <div class="brand-text">
+                <span class="product-name">SWE IT Assist</span>
+                <span class="product-tag" id="productTag">IT Self-Service Portal</span>
+            </div>
+        </div>
+
+        <div class="header-search">
+            <div class="header-search-box">
+                <span class="header-search-icon" data-icon="search"></span>
+                <input type="search" id="headerSearch" class="header-search-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="lang-switcher" id="langSwitcher"></div>
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span id="statusText">24/7 AI System Active</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN ================= -->
+    <main class="container">
+
+        <section class="hero hero--home fade-up">
+            <span class="eyebrow" id="heroEyebrow">IT Self-Service</span>
+            <h1 id="heroTitle">How can we help <span class="accent">you</span> today?</h1>
+            <p id="heroSubtitle">Loading…</p>
+        </section>
+
+        <!-- ================= CATEGORIES ================= -->
+        <section class="categories stagger" id="categoryGrid"></section>
+        <p class="search-empty" id="searchEmpty" hidden></p>
+
+        <p class="footer-note" id="footerNote"></p>
+
+    </main>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# These patterns are relative to whatever folder this .htaccess lives in,
+# so this works whether backend-php/ is your web root, a subfolder under
+# XAMPP's htdocs, or a subfolder on real hosting — no path to edit.
+
+# GET/POST api/support-requests  -> api/support-requests.php
+RewriteRule ^api/support-requests/?$ api/support-requests.php [L]
+
+# PATCH api/support-requests/{id}  -> api/support-requests.php?id={id}
+RewriteRule ^api/support-requests/([^/]+)/?$ api/support-requests.php?id=$1 [L,QSA]
