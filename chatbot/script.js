@@ -24,59 +24,76 @@ const recentHistoryList =
 
 
 /* =========================================================
-   WELCOME MESSAGE (used to reset chat-box)
+   WELCOME MESSAGE
 ========================================================= */
 
-const WELCOME_HTML = `
-    <div class="message bot-message">
+function getWelcomeHTML() {
 
-        <div class="bot-heading">
-            Welcome to SWE IT Assist
+    const lang =
+        window.SWE_CHAT_LANG || "en";
+
+    const t =
+        (
+            window.CHAT_I18N &&
+            window.CHAT_I18N[lang]
+        ) || {};
+
+    return `
+        <div class="message bot-message">
+
+            <div class="bot-heading">
+
+                ${escapeHtml(
+                    t.welcomeHeading ||
+                    "Welcome to SWE IT Assist"
+                )}
+
+            </div>
+
+            ${escapeHtml(
+                t.welcomeBody ||
+                "Hello! How can I help you today?"
+            )}
+
         </div>
+    `;
+}
 
-        Hello! How can I help you today?
 
-    </div>
-`;
+const WELCOME_HTML =
+    getWelcomeHTML();
 
 
 /* =========================================================
-   CHAT HISTORY STATE (localStorage)
+   CHAT HISTORY STATE
 ========================================================= */
 
-const STORAGE_KEY = "swe_it_assist_sessions";
+const STORAGE_KEY =
+    "swe_it_assist_sessions";
 
-/*
-   In-memory cache of all sessions.
-   Each session:
-   {
-       id: string,
-       title: string,
-       timestamp: number,
-       messages: [ { role, text, timestamp } ]
-   }
-*/
 
 let sessions = [];
 
-
-/*
-   ID of the session currently being viewed.
-   null = a fresh / unsaved "New Chat".
-*/
-
 let currentSessionId = null;
 
+
+/* =========================================================
+   LOAD SESSIONS
+========================================================= */
 
 function loadSessionsFromStorage() {
 
     try {
 
         const raw =
-            localStorage.getItem(STORAGE_KEY);
+            localStorage.getItem(
+                STORAGE_KEY
+            );
 
         const parsed =
-            raw ? JSON.parse(raw) : [];
+            raw
+                ? JSON.parse(raw)
+                : [];
 
         sessions =
             Array.isArray(parsed)
@@ -95,6 +112,10 @@ function loadSessionsFromStorage() {
     }
 }
 
+
+/* =========================================================
+   SAVE SESSIONS
+========================================================= */
 
 function saveSessionsToStorage() {
 
@@ -116,50 +137,79 @@ function saveSessionsToStorage() {
 }
 
 
+/* =========================================================
+   GET SESSION
+========================================================= */
+
 function getSessionById(id) {
 
     return sessions.find(
-        session => session.id === id
+        session =>
+            session.id === id
     );
+
 }
 
+
+/* =========================================================
+   GENERATE SESSION ID
+========================================================= */
 
 function generateSessionId() {
 
     if (
         window.crypto &&
-        typeof window.crypto.randomUUID === "function"
+        typeof window.crypto.randomUUID ===
+            "function"
     ) {
 
         return window.crypto.randomUUID();
 
     }
 
+
     return (
         "session-" +
         Date.now() +
         "-" +
-        Math.random().toString(16).slice(2)
+        Math.random()
+            .toString(16)
+            .slice(2)
     );
+
 }
 
+
+/* =========================================================
+   GENERATE TITLE
+========================================================= */
 
 function generateTitle(text) {
 
     const clean =
-        text.trim().replace(/\s+/g, " ");
+        text
+            .trim()
+            .replace(/\s+/g, " ");
 
     const MAX_LEN = 34;
 
-    if (clean.length <= MAX_LEN) {
+
+    if (
+        clean.length <= MAX_LEN
+    ) {
 
         return clean;
 
     }
 
+
     return (
-        clean.slice(0, MAX_LEN).trim() + "…"
+        clean
+            .slice(0, MAX_LEN)
+            .trim() +
+        "…"
     );
+
 }
 
 
@@ -171,6 +221,7 @@ function scrollToBottom() {
 
     chatBox.scrollTop =
         chatBox.scrollHeight;
+
 }
 
 
@@ -181,82 +232,69 @@ function scrollToBottom() {
 function formatBotMessage(text) {
 
     if (!text) {
+
         return "";
+
     }
 
 
-    /*
-       Escape HTML first
-       to prevent Gemini text
-       from injecting HTML.
-    */
-
-    let html = text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+    let html =
+        text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
 
 
-    /*
-       Bold
-       **text**
-    */
+    /* Bold */
 
-    html = html.replace(
-        /\*\*(.*?)\*\*/g,
-        "<strong>$1</strong>"
-    );
+    html =
+        html.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
 
 
-    /*
-       Headings
-       ### Heading
-    */
+    /* Headings */
 
-    html = html.replace(
-        /^###\s*(.+)$/gm,
-        '<div class="bot-heading">$1</div>'
-    );
+    html =
+        html.replace(
+            /^###\s*(.+)$/gm,
+            '<div class="bot-heading">$1</div>'
+        );
 
 
-    html = html.replace(
-        /^##\s*(.+)$/gm,
-        '<div class="bot-heading bot-heading-large">$1</div>'
-    );
+    html =
+        html.replace(
+            /^##\s*(.+)$/gm,
+            '<div class="bot-heading bot-heading-large">$1</div>'
+        );
 
 
-    /*
-       Numbered list
-       1. Something
-    */
+    /* Numbered list */
 
-    html = html.replace(
-        /^\s*(\d+)\.\s+(.+)$/gm,
-        '<div class="bot-list-item">' +
-        '<span class="list-number">$1.</span>' +
-        '<span>$2</span>' +
-        '</div>'
-    );
+    html =
+        html.replace(
+            /^\s*(\d+)\.\s+(.+)$/gm,
+            '<div class="bot-list-item">' +
+            '<span class="list-number">$1.</span>' +
+            '<span>$2</span>' +
+            '</div>'
+        );
 
 
-    /*
-       Bullet list
-       - Something
-       * Something
-    */
+    /* Bullet list */
 
-    html = html.replace(
-        /^\s*[-*]\s+(.+)$/gm,
-        '<div class="bot-list-item">' +
-        '<span class="list-bullet">•</span>' +
-        '<span>$1</span>' +
-        '</div>'
-    );
+    html =
+        html.replace(
+            /^\s*[-*]\s+(.+)$/gm,
+            '<div class="bot-list-item">' +
+            '<span class="list-bullet">•</span>' +
+            '<span>$1</span>' +
+            '</div>'
+        );
 
 
-    /*
-       New lines
-    */
+    /* New lines */
 
     html =
         html.replace(
@@ -266,11 +304,12 @@ function formatBotMessage(text) {
 
 
     return html;
+
 }
 
 
 /* =========================================================
-   ADD MESSAGE (renders to DOM only)
+   ADD MESSAGE
 ========================================================= */
 
 function addMessage(
@@ -287,17 +326,14 @@ function addMessage(
     );
 
 
-    if (sender === "user") {
+    if (
+        sender === "user"
+    ) {
 
         messageDiv.classList.add(
             "user-message"
         );
 
-
-        /*
-           User message
-           stays plain text
-        */
 
         messageDiv.textContent =
             message;
@@ -309,13 +345,10 @@ function addMessage(
         );
 
 
-        /*
-           Gemini response
-           gets formatted
-        */
-
         messageDiv.innerHTML =
-            formatBotMessage(message);
+            formatBotMessage(
+                message
+            );
 
     }
 
@@ -326,6 +359,7 @@ function addMessage(
 
 
     scrollToBottom();
+
 }
 
 
@@ -353,10 +387,26 @@ function showThinking() {
     );
 
 
+    const lang =
+        window.SWE_CHAT_LANG || "en";
+
+
+    const t =
+        (
+            window.CHAT_I18N &&
+            window.CHAT_I18N[lang]
+        ) || {};
+
+
     thinkingDiv.innerHTML = `
 
         <span>
-            Thinking
+
+            ${escapeHtml(
+                t.thinking ||
+                "Thinking"
+            )}
+
         </span>
 
         <div class="thinking-dots">
@@ -376,6 +426,7 @@ function showThinking() {
 
 
     scrollToBottom();
+
 }
 
 
@@ -396,20 +447,18 @@ function removeThinking() {
         thinking.remove();
 
     }
+
 }
 
 
 /* =========================================================
-   RENDER RECENT SIDEBAR LIST
+   RENDER RECENT SIDEBAR
 ========================================================= */
 
 function renderRecentList() {
 
-    /*
-       Clear existing items.
-    */
-
-    recentHistoryList.innerHTML = "";
+    recentHistoryList.innerHTML =
+        "";
 
 
     if (
@@ -420,96 +469,122 @@ function renderRecentList() {
         const emptyItem =
             document.createElement("li");
 
+
         emptyItem.className =
             "history-empty";
+
 
         emptyItem.id =
             "recent-empty";
 
+
+        const lang =
+            window.SWE_CHAT_LANG ||
+            "en";
+
+
+        const t =
+            (
+                window.CHAT_I18N &&
+                window.CHAT_I18N[lang]
+            ) || {};
+
+
         emptyItem.textContent =
+            t.recentEmpty ||
             "No recent chats yet";
+
 
         recentHistoryList.appendChild(
             emptyItem
         );
+
 
         return;
 
     }
 
 
-    /*
-       Newest first — sessions array
-       is always kept newest-first
-       via prepend on creation.
-    */
+    sessions.forEach(
+        session => {
 
-    sessions.forEach(session => {
-
-        const item =
-            document.createElement("li");
-
-        item.className =
-            "history-item";
-
-        item.dataset.sessionId =
-            session.id;
-
-        if (
-            session.id === currentSessionId
-        ) {
-
-            item.classList.add(
-                "is-active"
-            );
-
-        }
+            const item =
+                document.createElement("li");
 
 
-        item.innerHTML = `
-
-            <svg
-                class="history-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-            >
-
-                <path
-                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                ></path>
-
-            </svg>
+            item.className =
+                "history-item";
 
 
-            <span class="history-title">
-                ${escapeHtml(session.title)}
-            </span>
-
-        `;
+            item.dataset.sessionId =
+                session.id;
 
 
-        item.addEventListener(
-            "click",
-            function () {
+            if (
+                session.id ===
+                currentSessionId
+            ) {
 
-                switchToSession(
-                    session.id
+                item.classList.add(
+                    "is-active"
                 );
 
             }
-        );
 
 
-        recentHistoryList.appendChild(
-            item
-        );
+            item.innerHTML = `
 
-    });
+                <svg
+                    class="history-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+
+                    <path
+                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                    ></path>
+
+                </svg>
+
+
+                <span class="history-title">
+
+                    ${escapeHtml(
+                        session.title
+                    )}
+
+                </span>
+
+            `;
+
+
+            item.addEventListener(
+                "click",
+                function () {
+
+                    switchToSession(
+                        session.id
+                    );
+
+                }
+            );
+
+
+            recentHistoryList.appendChild(
+                item
+            );
+
+        }
+    );
 
 }
 
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHtml(text) {
 
@@ -522,13 +597,17 @@ function escapeHtml(text) {
 
 
 /* =========================================================
-   SWITCH TO AN EXISTING SESSION
+   SWITCH SESSION
 ========================================================= */
 
-function switchToSession(sessionId) {
+function switchToSession(
+    sessionId
+) {
 
     const session =
-        getSessionById(sessionId);
+        getSessionById(
+            sessionId
+        );
 
 
     if (!session) {
@@ -542,47 +621,35 @@ function switchToSession(sessionId) {
         session.id;
 
 
-    /*
-       Clear current view.
-    */
-
-    chatBox.innerHTML = "";
+    chatBox.innerHTML =
+        "";
 
 
-    /*
-       Render all stored messages
-       for this session.
-    */
+    session.messages.forEach(
+        msg => {
 
-    session.messages.forEach(msg => {
+            addMessage(
+                msg.text,
+                msg.role
+            );
 
-        addMessage(
-            msg.text,
-            msg.role
-        );
+        }
+    );
 
-    });
-
-
-    /*
-       Update active states
-       across both pinned + recent
-       (pinned items represent
-       template shortcuts, not
-       sessions, so just clear them).
-    */
 
     document
         .querySelectorAll(
             ".pinned-chat"
         )
-        .forEach(i => {
+        .forEach(
+            item => {
 
-            i.classList.remove(
-                "is-active"
-            );
+                item.classList.remove(
+                    "is-active"
+                );
 
-        });
+            }
+        );
 
 
     renderRecentList();
@@ -591,7 +658,7 @@ function switchToSession(sessionId) {
 
 
 /* =========================================================
-   START A NEW SESSION (persist first message)
+   CREATE NEW SESSION
 ========================================================= */
 
 function createNewSession(
@@ -600,29 +667,27 @@ function createNewSession(
 
     const newSession = {
 
-        id: generateSessionId(),
+        id:
+            generateSessionId(),
 
-        title: generateTitle(
-            firstMessageText
-        ),
+        title:
+            generateTitle(
+                firstMessageText
+            ),
 
-        timestamp: Date.now(),
+        timestamp:
+            Date.now(),
 
         messages: []
 
     };
 
 
-    /*
-       Prepend to top
-       of RECENT list —
-       array stays newest-first.
-    */
-
     sessions = [
         newSession,
         ...sessions
     ];
+
 
     currentSessionId =
         newSession.id;
@@ -630,15 +695,6 @@ function createNewSession(
 
     saveSessionsToStorage();
 
-
-    /*
-       Immediately reflect
-       in the sidebar —
-       this is what removes
-       "No recent chats yet"
-       and shows the new item
-       right away.
-    */
 
     renderRecentList();
 
@@ -648,16 +704,23 @@ function createNewSession(
 }
 
 
+/* =========================================================
+   ENSURE ACTIVE SESSION
+========================================================= */
+
 function ensureActiveSession(
     firstMessageText
 ) {
 
-    if (currentSessionId) {
+    if (
+        currentSessionId
+    ) {
 
         const existing =
             getSessionById(
                 currentSessionId
             );
+
 
         if (existing) {
 
@@ -665,15 +728,9 @@ function ensureActiveSession(
 
         }
 
-        /*
-           currentSessionId pointed
-           at a session that no
-           longer exists in storage —
-           fall through and create
-           a fresh one instead.
-        */
 
-        currentSessionId = null;
+        currentSessionId =
+            null;
 
     }
 
@@ -685,6 +742,10 @@ function ensureActiveSession(
 }
 
 
+/* =========================================================
+   PERSIST MESSAGE
+========================================================= */
+
 function persistMessage(
     role,
     text
@@ -693,7 +754,10 @@ function persistMessage(
     try {
 
         const session =
-            ensureActiveSession(text);
+            ensureActiveSession(
+                text
+            );
+
 
         if (!session) {
 
@@ -701,22 +765,19 @@ function persistMessage(
 
         }
 
+
         session.messages.push({
 
             role,
             text,
-            timestamp: Date.now()
+            timestamp:
+                Date.now()
 
         });
 
+
         saveSessionsToStorage();
 
-        /*
-           Keep the sidebar's title/
-           active highlighting in sync
-           on every message, not just
-           the first one.
-        */
 
         renderRecentList();
 
@@ -740,23 +801,11 @@ async function sendMessage(
     customMessage = null
 ) {
 
-
-    /*
-       If customMessage exists,
-       use it.
-
-       Otherwise use input.
-    */
-
     const message =
         customMessage !== null
             ? customMessage
             : input.value.trim();
 
-
-    /*
-       Don't send empty message.
-    */
 
     if (!message) {
 
@@ -765,23 +814,11 @@ async function sendMessage(
     }
 
 
-    /*
-       Add user message.
-    */
-
     addMessage(
         message,
         "user"
     );
 
-
-    /*
-       Persist user message
-       (creates a new session
-       + prepends to RECENT
-       if this is the first
-       message of a new chat).
-    */
 
     persistMessage(
         "user",
@@ -789,40 +826,25 @@ async function sendMessage(
     );
 
 
-    /*
-       Clear input.
-    */
-
     input.value = "";
 
-
-    /*
-       Show thinking.
-    */
 
     showThinking();
 
 
-    /*
-       Disable send button.
-    */
-
-    sendButton.disabled = true;
+    sendButton.disabled =
+        true;
 
 
     try {
-
-
-        /* =================================================
-           FASTAPI
-        ================================================= */
 
         const response =
             await fetch(
                 "http://127.0.0.1:8000/chat",
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     headers: {
 
@@ -843,10 +865,6 @@ async function sendMessage(
             );
 
 
-        /*
-           Check HTTP status.
-        */
-
         if (!response.ok) {
 
             throw new Error(
@@ -856,24 +874,12 @@ async function sendMessage(
         }
 
 
-        /*
-           Convert to JSON.
-        */
-
         const data =
             await response.json();
 
 
-        /*
-           Remove thinking.
-        */
-
         removeThinking();
 
-
-        /*
-           Gemini response.
-        */
 
         if (
             data &&
@@ -885,6 +891,7 @@ async function sendMessage(
                 "bot"
             );
 
+
             persistMessage(
                 "bot",
                 data.response
@@ -892,13 +899,28 @@ async function sendMessage(
 
         } else {
 
+            const lang =
+                window.SWE_CHAT_LANG ||
+                "en";
+
+
+            const t =
+                (
+                    window.CHAT_I18N &&
+                    window.CHAT_I18N[lang]
+                ) || {};
+
+
             const fallback =
+                t.errorNoAI ||
                 "I couldn't get a response from the AI. Please try again.";
+
 
             addMessage(
                 fallback,
                 "bot"
             );
+
 
             persistMessage(
                 "bot",
@@ -910,31 +932,37 @@ async function sendMessage(
 
     } catch (error) {
 
-
         console.error(
             "Chat error:",
             error
         );
 
 
-        /*
-           Remove thinking.
-        */
-
         removeThinking();
 
 
-        /*
-           Friendly error.
-        */
+        const lang =
+            window.SWE_CHAT_LANG ||
+            "en";
+
+
+        const t =
+            (
+                window.CHAT_I18N &&
+                window.CHAT_I18N[lang]
+            ) || {};
+
 
         const errorMessage =
+            t.errorConn ||
             "I couldn't connect to the AI right now. Please check that the IT Assist server is running and try again.";
+
 
         addMessage(
             errorMessage,
             "bot"
         );
+
 
         persistMessage(
             "bot",
@@ -944,18 +972,9 @@ async function sendMessage(
 
     } finally {
 
-
-        /*
-           Enable button.
-        */
-
         sendButton.disabled =
             false;
 
-
-        /*
-           Focus input.
-        */
 
         input.focus();
 
@@ -1038,26 +1057,13 @@ newChatButton.addEventListener(
     "click",
     function () {
 
+        currentSessionId =
+            null;
 
-        /*
-           Reset active session context.
-        */
-
-        currentSessionId = null;
-
-
-        /*
-           Clear chat.
-        */
 
         chatBox.innerHTML =
-            WELCOME_HTML;
+            getWelcomeHTML();
 
-
-        /*
-           Remove active states
-           from pinned shortcuts.
-        */
 
         document
             .querySelectorAll(
@@ -1074,17 +1080,8 @@ newChatButton.addEventListener(
             );
 
 
-        /*
-           Remove active states
-           from recent sessions.
-        */
-
         renderRecentList();
 
-
-        /*
-           Focus input.
-        */
 
         input.focus();
 
@@ -1093,9 +1090,7 @@ newChatButton.addEventListener(
 
 
 /* =========================================================
-   PINNED ISSUES (static shortcuts — always start
-   a fresh session context, never persisted as
-   editable pinned entries themselves)
+   PINNED ISSUES
 ========================================================= */
 
 document
@@ -1109,21 +1104,11 @@ document
                 "click",
                 function () {
 
-
-                    /*
-                       Get predefined message.
-                    */
-
                     const message =
                         this.getAttribute(
                             "data-message"
                         );
 
-
-                    /*
-                       Remove active
-                       from other pinned items.
-                    */
 
                     document
                         .querySelectorAll(
@@ -1140,32 +1125,18 @@ document
                         );
 
 
-                    /*
-                       Activate selected item.
-                    */
-
                     this.classList.add(
                         "is-active"
                     );
 
 
-                    /*
-                       A pinned shortcut always
-                       starts a brand-new session
-                       context so it doesn't
-                       append onto whatever
-                       chat was open before.
-                    */
+                    currentSessionId =
+                        null;
 
-                    currentSessionId = null;
 
                     chatBox.innerHTML =
-                        WELCOME_HTML;
+                        getWelcomeHTML();
 
-
-                    /*
-                       Send message.
-                    */
 
                     sendMessage(
                         message
@@ -1179,17 +1150,25 @@ document
 
 
 /* =========================================================
-   INIT — load persisted sessions
-   and populate RECENT sidebar
+   LANGUAGE CHANGE EVENT
+========================================================= */
+
+window.addEventListener(
+    "languageChanged",
+    function () {
+
+        renderRecentList();
+
+    }
+);
+
+
+/* =========================================================
+   INIT
 ========================================================= */
 
 loadSessionsFromStorage();
 
 renderRecentList();
-
-
-/* =========================================================
-   INITIAL FOCUS
-========================================================= */
 
 input.focus();

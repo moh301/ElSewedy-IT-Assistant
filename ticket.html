@@ -1,771 +1,2925 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create Support Ticket — Elsewedy Electric IT Assist</title>
-<style>
-  :root{
-    --navy:#0b1f3a;
-    --navy-soft:#1c3a63;
-    --red:#a60c2c;
-    --red-dark:#8a0a24;
-    --red-light:#fdebee;
-    --bg:#f8f9fa;
-    --card:#ffffff;
-    --border:#e6e8eb;
-    --text:#1c1f26;
-    --text-muted:#6b7280;
-    --text-faint:#9ca3af;
-    --shadow-sm: 0 1px 2px rgba(16,24,40,0.04);
-    --shadow-md: 0 4px 16px rgba(16,24,40,0.06);
-    --shadow-lg: 0 12px 32px rgba(16,24,40,0.08);
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  *{box-sizing:border-box;}
+    <title>Create Support Ticket — Elsewedy Electric IT Assist</title>
 
-  html,body{
-    margin:0;
-    padding:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:"Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
+    <style>
+        :root {
+            --navy: #0b1f3a;
+            --navy-soft: #1c3a63;
+            --red: #a60c2c;
+            --red-dark: #8a0a24;
+            --red-light: #fdebee;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --border: #e6e8eb;
+            --text: #1c1f26;
+            --text-muted: #6b7280;
+            --text-faint: #9ca3af;
 
-  body{
-    background:
-      radial-gradient(600px 300px at 100% 0%, rgba(166,12,44,0.06), transparent 60%),
-      radial-gradient(500px 260px at 0% 0%, rgba(11,31,58,0.05), transparent 55%),
-      var(--bg);
-    min-height:100vh;
-  }
+            --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+            --shadow-md: 0 4px 16px rgba(16, 24, 40, 0.06);
+            --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.08);
 
-  a{ text-decoration:none; color:inherit; }
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+        }
 
-  /* ---------- Top bar ---------- */
-  .topbar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:16px 32px;
-    border-bottom:1px solid var(--border);
-    background:rgba(255,255,255,0.85);
-    backdrop-filter:blur(6px);
-    position:sticky;
-    top:0;
-    z-index:10;
-  }
+        * {
+            box-sizing: border-box;
+        }
 
-  .topbar-left{
-    display:flex;
-    align-items:center;
-    gap:18px;
-  }
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont,
+                "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
 
-  .back-btn{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    padding:8px 14px;
-    border-radius:999px;
-    border:1px solid var(--border);
-    background:var(--card);
-    color:var(--navy);
-    font-size:13.5px;
-    font-weight:600;
-    cursor:pointer;
-    transition:all .15s ease;
-  }
-  .back-btn:hover{
-    border-color:var(--red);
-    color:var(--red);
-    box-shadow:var(--shadow-sm);
-  }
-  .back-btn svg{ width:15px; height:15px; }
+        body {
+            background:
+                radial-gradient(
+                    600px 300px at 100% 0%,
+                    rgba(166, 12, 44, 0.06),
+                    transparent 60%
+                ),
+                radial-gradient(
+                    500px 260px at 0% 0%,
+                    rgba(11, 31, 58, 0.05),
+                    transparent 55%
+                ),
+                var(--bg);
 
-  .logo-link{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    cursor:pointer;
-  }
+            min-height: 100vh;
+        }
 
-  .topbar-right{
-    font-size:13px;
-    color:var(--text-muted);
-    font-weight:500;
-  }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-  /* ---------- Page container ---------- */
-  .page{
-    max-width:920px;
-    margin:0 auto;
-    padding:36px 24px 80px;
-  }
+        /* =========================
+           TOP BAR
+        ========================= */
 
-  .breadcrumb{
-    font-size:13px;
-    color:var(--text-faint);
-    margin-bottom:22px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-  }
-  .breadcrumb .current{
-    color:var(--text);
-    font-weight:600;
-  }
-  .breadcrumb span.sep{ color:var(--text-faint); }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
-  .page-header{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:20px;
-    margin-bottom:34px;
-  }
+            padding: 16px 32px;
 
-  .header-left{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-  }
+            border-bottom: 1px solid var(--border);
 
-  .icon-square{
-    width:52px;
-    height:52px;
-    border-radius:14px;
-    background:linear-gradient(150deg, var(--red), var(--red-dark));
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 8px 18px rgba(166,12,44,0.25);
-  }
-  .icon-square svg{ width:24px; height:24px; }
+            background: rgba(255, 255, 255, 0.85);
 
-  .page-title{
-    font-size:32px;
-    font-weight:800;
-    color:var(--navy);
-    letter-spacing:-.3px;
-    margin:0;
-  }
+            backdrop-filter: blur(6px);
 
-  .page-subtitle{
-    font-size:15px;
-    color:var(--text-muted);
-    margin:0;
-    max-width:560px;
-    line-height:1.5;
-  }
+            position: sticky;
+            top: 0;
 
-  .badge{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    padding:8px 16px;
-    border-radius:999px;
-    background:var(--card);
-    border:1px solid var(--border);
-    font-size:12.5px;
-    font-weight:600;
-    color:var(--navy);
-    box-shadow:var(--shadow-sm);
-    white-space:nowrap;
-    margin-top:6px;
-  }
-  .badge::before{
-    content:"";
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:var(--red);
-    display:inline-block;
-  }
+            z-index: 10;
+        }
 
-  /* ---------- Card ---------- */
-  .card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:var(--radius-lg);
-    box-shadow:var(--shadow-lg);
-    padding:36px;
-  }
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
 
-  .card-intro{
-    display:flex;
-    align-items:flex-start;
-    gap:14px;
-    padding-bottom:26px;
-    margin-bottom:28px;
-    border-bottom:1px solid var(--border);
-  }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
 
-  .intro-icon{
-    width:42px;
-    height:42px;
-    border-radius:11px;
-    background:var(--red-light);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-  }
-  .intro-icon svg{ width:20px; height:20px; color:var(--red); }
+            padding: 8px 14px;
 
-  .intro-text h2{
-    font-size:16.5px;
-    font-weight:700;
-    color:var(--text);
-    margin:0 0 4px;
-  }
-  .intro-text p{
-    font-size:13.5px;
-    color:var(--text-muted);
-    margin:0;
-    line-height:1.5;
-  }
+            border-radius: 999px;
 
-  /* ---------- Form ---------- */
-  .form-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:22px 20px;
-    margin-bottom:22px;
-  }
+            border: 1px solid var(--border);
 
-  .field{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-  .field.full{
-    grid-column:1 / -1;
-  }
+            background: var(--card);
 
-  .field label{
-    font-size:13.5px;
-    font-weight:600;
-    color:var(--text);
-  }
-  .field label .req{
-    color:var(--red);
-    margin-left:2px;
-  }
-  .field label .optional{
-    color:var(--text-faint);
-    font-weight:500;
-    font-size:12px;
-    margin-left:4px;
-  }
+            color: var(--navy);
 
-  .field input[type="text"],
-  .field input[type="email"],
-  .field select,
-  .field textarea{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:var(--radius-sm);
-    padding:11px 13px;
-    font-size:14px;
-    font-family:inherit;
-    color:var(--text);
-    background:#fdfdfe;
-    transition:border-color .15s ease, box-shadow .15s ease;
-  }
+            font-size: 13.5px;
+            font-weight: 600;
 
-  .field input::placeholder,
-  .field textarea::placeholder{
-    color:var(--text-faint);
-  }
+            cursor: pointer;
 
-  .field input:focus,
-  .field select:focus,
-  .field textarea:focus{
-    outline:none;
-    border-color:var(--red);
-    box-shadow:0 0 0 3px rgba(166,12,44,0.12);
-    background:#ffffff;
-  }
+            transition: all 0.15s ease;
+        }
 
-  .field select{
-    appearance:none;
-    -webkit-appearance:none;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
-    background-repeat:no-repeat;
-    background-position:right 12px center;
-    padding-right:34px;
-    cursor:pointer;
-  }
+        .back-btn:hover {
+            border-color: var(--red);
+            color: var(--red);
+            box-shadow: var(--shadow-sm);
+        }
 
-  .field textarea{
-    resize:vertical;
-    min-height:140px;
-    line-height:1.5;
-  }
+        .back-btn svg {
+            width: 15px;
+            height: 15px;
+        }
 
-  .char-count{
-    align-self:flex-end;
-    font-size:12px;
-    color:var(--text-faint);
-  }
-  .char-count.warn{ color:var(--red); }
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
 
-  /* File upload */
-  .file-drop{
-    border:1.5px dashed var(--border);
-    border-radius:var(--radius-sm);
-    background:#fbfbfc;
-    padding:20px 16px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    cursor:pointer;
-    transition:border-color .15s ease, background .15s ease;
-  }
-  .file-drop:hover{
-    border-color:var(--red);
-    background:var(--red-light);
-  }
-  .file-drop svg{
-    width:22px;
-    height:22px;
-    color:var(--red);
-    flex-shrink:0;
-  }
-  .file-drop-text{
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-  }
-  .file-drop-text .main{
-    font-size:13.5px;
-    font-weight:600;
-    color:var(--text);
-  }
-  .file-drop-text .sub{
-    font-size:12px;
-    color:var(--text-faint);
-  }
-  #fileInput{ display:none; }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
 
-  .file-list{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    margin-top:4px;
-  }
-  .file-chip{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:var(--red-light);
-    border:1px solid #f4c9d2;
-    border-radius:8px;
-    padding:7px 11px;
-    font-size:12.5px;
-    color:var(--navy);
-    font-weight:500;
-  }
-  .file-chip button{
-    background:none;
-    border:none;
-    color:var(--red);
-    font-size:13px;
-    cursor:pointer;
-    font-weight:700;
-    line-height:1;
-    padding:2px 4px;
-  }
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
-  /* ---------- Footer / Submit ---------- */
-  .form-footer{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-top:8px;
-    padding-top:22px;
-    border-top:1px solid var(--border);
-  }
+        /* =========================
+           LANGUAGE SWITCHER
+        ========================= */
 
-  .footer-note{
-    font-size:12.5px;
-    color:var(--text-faint);
-  }
+        .language-switcher {
+            position: relative;
+        }
 
-  .submit-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:9px;
-    background:linear-gradient(150deg, var(--red), var(--red-dark));
-    color:#fff;
-    border:none;
-    padding:13px 24px;
-    border-radius:11px;
-    font-size:14.5px;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow:0 10px 22px rgba(166,12,44,0.28);
-    transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
-  }
-  .submit-btn:hover{
-    transform:translateY(-1px);
-    box-shadow:0 14px 26px rgba(166,12,44,0.34);
-  }
-  .submit-btn:active{
-    transform:translateY(0);
-  }
-  .submit-btn:disabled{
-    opacity:.65;
-    cursor:not-allowed;
-    transform:none;
-  }
-  .submit-btn svg{ width:16px; height:16px; }
+        .lang-trigger {
+            display: flex;
+            align-items: center;
+            gap: 7px;
 
-  /* ---------- Success state ---------- */
-  .success-panel{
-    display:none;
-    text-align:center;
-    padding:50px 20px 30px;
-  }
-  .success-panel.show{ display:block; }
-  .success-icon{
-    width:64px;
-    height:64px;
-    border-radius:50%;
-    background:var(--red-light);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:0 auto 18px;
-  }
-  .success-icon svg{ width:30px; height:30px; color:var(--red); }
-  .success-panel h3{
-    font-size:20px;
-    font-weight:800;
-    color:var(--navy);
-    margin:0 0 8px;
-  }
-  .success-panel p{
-    font-size:14px;
-    color:var(--text-muted);
-    margin:0 0 6px;
-  }
-  .ticket-ref{
-    display:inline-block;
-    margin-top:10px;
-    font-size:13px;
-    font-weight:700;
-    color:var(--red);
-    background:var(--red-light);
-    padding:6px 14px;
-    border-radius:999px;
-    letter-spacing:.3px;
-  }
-  .new-ticket-btn{
-    margin-top:24px;
-    background:var(--card);
-    border:1px solid var(--border);
-    color:var(--navy);
-    font-weight:600;
-    font-size:13.5px;
-    padding:10px 20px;
-    border-radius:10px;
-    cursor:pointer;
-  }
-  .new-ticket-btn:hover{
-    border-color:var(--red);
-    color:var(--red);
-  }
+            height: 36px;
+            padding: 0 11px;
 
-  #ticketForm.hide{ display:none; }
+            border: 1px solid var(--border);
+            border-radius: 9px;
 
-  /* ---------- Responsive ---------- */
-  @media (max-width: 680px){
-    .topbar{ padding:14px 18px; }
-    .page{ padding:26px 16px 60px; }
-    .form-grid{ grid-template-columns:1fr; }
-    .page-header{ flex-direction:column; }
-    .page-title{ font-size:26px; }
-    .card{ padding:24px 18px; }
-  }
-</style>
+            background: #ffffff;
+
+            color: var(--navy);
+
+            font-size: 12.5px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: all 0.15s ease;
+        }
+
+        .lang-trigger:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .lang-trigger svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .lang-arrow {
+            width: 13px !important;
+            height: 13px !important;
+            transition: transform 0.15s ease;
+        }
+
+        .lang-menu {
+            position: absolute;
+
+            top: calc(100% + 8px);
+            right: 0;
+
+            width: 150px;
+
+            background: #ffffff;
+
+            border: 1px solid var(--border);
+            border-radius: 11px;
+
+            box-shadow: var(--shadow-lg);
+
+            padding: 5px;
+
+            display: none;
+
+            z-index: 100;
+        }
+
+        .lang-menu.is-open {
+            display: block;
+        }
+
+        .lang-option {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            padding: 9px 10px;
+
+            border: none;
+            border-radius: 7px;
+
+            background: transparent;
+
+            color: var(--text);
+
+            font-size: 13px;
+            font-weight: 500;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .lang-option:hover {
+            background: var(--red-light);
+            color: var(--red);
+        }
+
+        .lang-option.is-active {
+            background: var(--red-light);
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .page {
+            max-width: 920px;
+
+            margin: 0 auto;
+
+            padding: 36px 24px 80px;
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--text-faint);
+
+            margin-bottom: 22px;
+
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .breadcrumb .current {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .breadcrumb span.sep {
+            color: var(--text-faint);
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 34px;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .icon-square {
+            width: 52px;
+            height: 52px;
+
+            border-radius: 14px;
+
+            background: linear-gradient(
+                150deg,
+                var(--red),
+                var(--red-dark)
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-shadow: 0 8px 18px rgba(166, 12, 44, 0.25);
+        }
+
+        .icon-square svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+
+            color: var(--navy);
+
+            letter-spacing: -0.3px;
+
+            margin: 0;
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+
+            margin: 0;
+
+            max-width: 560px;
+
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            padding: 8px 16px;
+
+            border-radius: 999px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            font-size: 12.5px;
+            font-weight: 600;
+
+            color: var(--navy);
+
+            box-shadow: var(--shadow-sm);
+
+            white-space: nowrap;
+
+            margin-top: 6px;
+        }
+
+        .badge::before {
+            content: "";
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: var(--red);
+
+            display: inline-block;
+        }
+
+        /* =========================
+           CARD
+        ========================= */
+
+        .card {
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-lg);
+
+            box-shadow: var(--shadow-lg);
+
+            padding: 36px;
+        }
+
+        .card-intro {
+            display: flex;
+            align-items: flex-start;
+
+            gap: 14px;
+
+            padding-bottom: 26px;
+            margin-bottom: 28px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .intro-icon {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 11px;
+
+            background: var(--red-light);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .intro-icon svg {
+            width: 20px;
+            height: 20px;
+
+            color: var(--red);
+        }
+
+        .intro-text h2 {
+            font-size: 16.5px;
+            font-weight: 700;
+
+            color: var(--text);
+
+            margin: 0 0 4px;
+        }
+
+        .intro-text p {
+            font-size: 13.5px;
+            color: var(--text-muted);
+
+            margin: 0;
+
+            line-height: 1.5;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 22px 20px;
+
+            margin-bottom: 22px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            font-size: 13.5px;
+            font-weight: 600;
+
+            color: var(--text);
+        }
+
+        .field label .req {
+            color: var(--red);
+            margin-left: 2px;
+        }
+
+        .field label .optional {
+            color: var(--text-faint);
+
+            font-weight: 500;
+
+            font-size: 12px;
+
+            margin-left: 4px;
+        }
+
+        .field input[type="text"],
+        .field input[type="email"],
+        .field select,
+        .field textarea {
+            width: 100%;
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-sm);
+
+            padding: 11px 13px;
+
+            font-size: 14px;
+
+            font-family: inherit;
+
+            color: var(--text);
+
+            background: #fdfdfe;
+
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .field input::placeholder,
+        .field textarea::placeholder {
+            color: var(--text-faint);
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            outline: none;
+
+            border-color: var(--red);
+
+            box-shadow: 0 0 0 3px rgba(166, 12, 44, 0.12);
+
+            background: #ffffff;
+        }
+
+        .field select {
+            appearance: none;
+            -webkit-appearance: none;
+
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+
+            background-repeat: no-repeat;
+
+            background-position: right 12px center;
+
+            padding-right: 34px;
+
+            cursor: pointer;
+        }
+
+        .field textarea {
+            resize: vertical;
+
+            min-height: 140px;
+
+            line-height: 1.5;
+        }
+
+        .char-count {
+            align-self: flex-end;
+
+            font-size: 12px;
+
+            color: var(--text-faint);
+        }
+
+        .char-count.warn {
+            color: var(--red);
+        }
+
+        /* =========================
+           FILE UPLOAD
+        ========================= */
+
+        .file-drop {
+            border: 1.5px dashed var(--border);
+
+            border-radius: var(--radius-sm);
+
+            background: #fbfbfc;
+
+            padding: 20px 16px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.15s ease,
+                background 0.15s ease;
+        }
+
+        .file-drop:hover {
+            border-color: var(--red);
+
+            background: var(--red-light);
+        }
+
+        .file-drop svg {
+            width: 22px;
+            height: 22px;
+
+            color: var(--red);
+
+            flex-shrink: 0;
+        }
+
+        .file-drop-text {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 2px;
+        }
+
+        .file-drop-text .main {
+            font-size: 13.5px;
+
+            font-weight: 600;
+
+            color: var(--text);
+        }
+
+        .file-drop-text .sub {
+            font-size: 12px;
+
+            color: var(--text-faint);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 6px;
+
+            margin-top: 4px;
+        }
+
+        .file-chip {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background: var(--red-light);
+
+            border: 1px solid #f4c9d2;
+
+            border-radius: 8px;
+
+            padding: 7px 11px;
+
+            font-size: 12.5px;
+
+            color: var(--navy);
+
+            font-weight: 500;
+        }
+
+        .file-chip button {
+            background: none;
+
+            border: none;
+
+            color: var(--red);
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            font-weight: 700;
+
+            line-height: 1;
+
+            padding: 2px 4px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .form-footer {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-top: 8px;
+
+            padding-top: 22px;
+
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-note {
+            font-size: 12.5px;
+
+            color: var(--text-faint);
+        }
+
+        .submit-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            background: linear-gradient(
+                150deg,
+                var(--red),
+                var(--red-dark)
+            );
+
+            color: #fff;
+
+            border: none;
+
+            padding: 13px 24px;
+
+            border-radius: 11px;
+
+            font-size: 14.5px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow: 0 10px 22px rgba(166, 12, 44, 0.28);
+
+            transition:
+                transform 0.12s ease,
+                box-shadow 0.12s ease,
+                opacity 0.12s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+
+            box-shadow: 0 14px 26px rgba(166, 12, 44, 0.34);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.65;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        .submit-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* =========================
+           SUCCESS
+        ========================= */
+
+        .success-panel {
+            display: none;
+
+            text-align: center;
+
+            padding: 50px 20px 30px;
+        }
+
+        .success-panel.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+
+            border-radius: 50%;
+
+            background: var(--red-light);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: 0 auto 18px;
+        }
+
+        .success-icon svg {
+            width: 30px;
+            height: 30px;
+
+            color: var(--red);
+        }
+
+        .success-panel h3 {
+            font-size: 20px;
+
+            font-weight: 800;
+
+            color: var(--navy);
+
+            margin: 0 0 8px;
+        }
+
+        .success-panel p {
+            font-size: 14px;
+
+            color: var(--text-muted);
+
+            margin: 0 0 6px;
+        }
+
+        .ticket-ref {
+            display: inline-block;
+
+            margin-top: 10px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: var(--red);
+
+            background: var(--red-light);
+
+            padding: 6px 14px;
+
+            border-radius: 999px;
+
+            letter-spacing: 0.3px;
+        }
+
+        .new-ticket-btn {
+            margin-top: 24px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            color: var(--navy);
+
+            font-weight: 600;
+
+            font-size: 13.5px;
+
+            padding: 10px 20px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+        }
+
+        .new-ticket-btn:hover {
+            border-color: var(--red);
+
+            color: var(--red);
+        }
+
+        #ticketForm.hide {
+            display: none;
+        }
+
+        /* =========================
+           RTL
+        ========================= */
+
+        html[dir="rtl"] body {
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+
+        html[dir="rtl"] .topbar {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .topbar-left,
+        html[dir="rtl"] .topbar-right {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .back-btn svg {
+            transform: rotate(180deg);
+        }
+
+        html[dir="rtl"] .breadcrumb {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .field label .req {
+            margin-left: 0;
+            margin-right: 2px;
+        }
+
+        html[dir="rtl"] .field label .optional {
+            margin-left: 0;
+            margin-right: 4px;
+        }
+
+        html[dir="rtl"] .field input,
+        html[dir="rtl"] .field select,
+        html[dir="rtl"] .field textarea {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .field select {
+            background-position: left 12px center;
+
+            padding-right: 13px;
+            padding-left: 34px;
+        }
+
+        html[dir="rtl"] .form-footer {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .lang-menu {
+            right: auto;
+            left: 0;
+        }
+
+        html[dir="rtl"] .lang-option {
+            text-align: right;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 680px) {
+            .topbar {
+                padding: 14px 18px;
+            }
+
+            .topbar-right {
+                gap: 8px;
+            }
+
+            .topbar-right > span {
+                display: none;
+            }
+
+            .page {
+                padding: 26px 16px 60px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                flex-direction: column;
+            }
+
+            .page-title {
+                font-size: 26px;
+            }
+
+            .card {
+                padding: 24px 18px;
+            }
+
+            .form-footer {
+                flex-direction: column;
+
+                align-items: stretch;
+
+                gap: 16px;
+            }
+
+            .submit-btn {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- Top bar -->
-  <div class="topbar">
-    <div class="topbar-left">
-      <button class="back-btn" id="backBtn" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        Back
-      </button>
-      <a href="index.html" class="logo-link" aria-label="Go to home page">
-        <img src="assets/logo.gif" alt="Elsewedy Electric Logo" style="height: 48px; width: auto; object-fit: contain;">
-      </a>
-    </div>
-    <div class="topbar-right">Support Portal</div>
-  </div>
+    <!-- =========================
+         TOP BAR
+    ========================= -->
 
-  <div class="page">
+    <div class="topbar">
 
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-      <span>Home</span>
-      <span class="sep">/</span>
-      <span class="current">Submit Ticket</span>
-    </div>
+        <div class="topbar-left">
 
-    <!-- Page header -->
-    <div class="page-header">
-      <div class="header-left">
-        <div class="icon-square">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
-            <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
-            <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
-            <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
-          </svg>
-        </div>
-        <div>
-          <h1 class="page-title">Create Support Ticket</h1>
-          <p class="page-subtitle">Describe your problem in your own words and our IT team will follow up with you.</p>
-        </div>
-      </div>
-      <span class="badge">Support Request</span>
-    </div>
+            <button
+                class="back-btn"
+                id="backBtn"
+                type="button"
+                data-i18n-title="goBack"
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
 
-    <!-- Main card -->
-    <div class="card">
+                <span data-i18n="goBack">Back</span>
+            </button>
 
-      <form id="ticketForm" novalidate>
-        <div class="card-intro">
-          <div class="intro-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 20h9"></path>
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
-            </svg>
-          </div>
-          <div class="intro-text">
-            <h2>Tell us what's going on</h2>
-            <p>Fill in your details and describe the issue in as much detail as you can — our IT team will follow up with you directly.</p>
-          </div>
+            <a
+                href="index.html"
+                class="logo-link"
+                aria-label="Go to home page"
+                data-i18n-title="goHome"
+            >
+                <img
+                    src="assets/logo.gif"
+                    alt="Elsewedy Electric Logo"
+                    style="height: 48px; width: auto; object-fit: contain;"
+                >
+            </a>
+
         </div>
 
-        <div class="form-grid">
-          <div class="field">
-            <label for="fullName">Full Name<span class="req">*</span></label>
-            <input type="text" id="fullName" name="fullName" placeholder="e.g. Ahmed Mostafa" required>
-          </div>
 
-          <div class="field">
-            <label for="emailId">Email / Employee ID<span class="req">*</span></label>
-            <input type="text" id="emailId" name="emailId" placeholder="e.g. a.mostafa@elsewedy.com or EMP-00214" required>
-          </div>
+        <div class="topbar-right">
 
-          <div class="field">
-            <label for="category">Issue Category<span class="req">*</span></label>
-            <select id="category" name="category" required>
-              <option value="" disabled selected>Select a category</option>
-              <option value="hardware">Hardware</option>
-              <option value="software">Software</option>
-              <option value="network">Network / Connectivity</option>
-              <option value="account">Account & Access</option>
-              <option value="email">Email & Outlook</option>
-              <option value="other">Other / Custom Issue</option>
-            </select>
-          </div>
+            <span data-i18n="supportPortal">
+                Support Portal
+            </span>
 
-          <div class="field">
-            <label for="priority">Priority Level<span class="req">*</span></label>
-            <select id="priority" name="priority" required>
-              <option value="" disabled selected>Select priority</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
-            </select>
-          </div>
+            <!-- Language -->
 
-          <div class="field full">
-            <label for="subject">Subject<span class="req">*</span></label>
-            <input type="text" id="subject" name="subject" placeholder="Briefly summarize the issue" required>
-          </div>
+            <div class="language-switcher">
 
-          <div class="field full">
-            <label for="description">Describe your issue<span class="req">*</span></label>
-            <textarea id="description" name="description" maxlength="800" placeholder="Example: My laptop screen flickers randomly when connected to the docking station monitor…" required></textarea>
-            <span class="char-count" id="charCount">0 / 800</span>
-          </div>
+                <button
+                    class="lang-trigger"
+                    id="lang-trigger"
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
 
-          <div class="field full">
-            <label for="fileInput">File Attachment <span class="optional">(optional)</span></label>
-            <div class="file-drop" id="fileDrop">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-              </svg>
-              <div class="file-drop-text">
-                <span class="main">Click to upload or drag a file here</span>
-                <span class="sub">Screenshots, logs, or documents — up to 10MB</span>
-              </div>
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15 15 0 0 1 0 20"></path>
+                        <path d="M12 2a15 15 0 0 0 0 20"></path>
+                    </svg>
+
+                    <span id="lang-current">EN</span>
+
+                    <svg
+                        class="lang-arrow"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+
+                </button>
+
+
+                <div
+                    class="lang-menu"
+                    id="lang-menu"
+                >
+
+                    <button
+                        class="lang-option"
+                        data-lang="en"
+                        type="button"
+                    >
+                        English
+                    </button>
+
+                    <button
+                        class="lang-option"
+                        data-lang="ar"
+                        type="button"
+                    >
+                        العربية
+                    </button>
+
+                    <button
+                        class="lang-option"
+                        data-lang="es"
+                        type="button"
+                    >
+                        Español
+                    </button>
+
+                    <button
+                        class="lang-option"
+                        data-lang="zh"
+                        type="button"
+                    >
+                        中文
+                    </button>
+
+                </div>
+
             </div>
-            <input type="file" id="fileInput" multiple>
-            <div class="file-list" id="fileList"></div>
-          </div>
-        </div>
 
-        <div class="form-footer">
-          <span class="footer-note">Fields marked with * are required</span>
-          <button type="submit" class="submit-btn" id="submitBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-            Submit request
-          </button>
         </div>
-      </form>
-
-      <!-- Success panel -->
-      <div class="success-panel" id="successPanel">
-        <div class="success-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-        <h3>Ticket submitted successfully</h3>
-        <p>Our IT team has received your request and will follow up with you shortly.</p>
-        <span class="ticket-ref" id="ticketRef">TCK-000000</span>
-        <div>
-          <button class="new-ticket-btn" id="newTicketBtn" type="button">Submit another ticket</button>
-        </div>
-      </div>
 
     </div>
-  </div>
 
-<script>
-  // Back button
-  document.getElementById('backBtn').addEventListener('click', function(){
-    window.history.back();
-  });
 
-  // Character counter for description
-  const description = document.getElementById('description');
-  const charCount = document.getElementById('charCount');
-  description.addEventListener('input', function(){
-    const len = description.value.length;
-    charCount.textContent = len + ' / 800';
-    charCount.classList.toggle('warn', len >= 750);
-  });
+    <!-- =========================
+         PAGE
+    ========================= -->
 
-  // File attachment handling
-  const fileDrop = document.getElementById('fileDrop');
-  const fileInput = document.getElementById('fileInput');
-  const fileList = document.getElementById('fileList');
-  let attachedFiles = [];
+    <div class="page">
 
-  fileDrop.addEventListener('click', () => fileInput.click());
+        <!-- Breadcrumb -->
 
-  fileDrop.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    fileDrop.style.borderColor = 'var(--red)';
-    fileDrop.style.background = 'var(--red-light)';
-  });
-  fileDrop.addEventListener('dragleave', () => {
-    fileDrop.style.borderColor = '';
-    fileDrop.style.background = '';
-  });
-  fileDrop.addEventListener('drop', (e) => {
-    e.preventDefault();
-    fileDrop.style.borderColor = '';
-    fileDrop.style.background = '';
-    handleFiles(e.dataTransfer.files);
-  });
+        <div class="breadcrumb">
 
-  fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+            <span data-i18n="home">
+                Home
+            </span>
 
-  function handleFiles(fileArray){
-    Array.from(fileArray).forEach(file => attachedFiles.push(file));
-    renderFileList();
-  }
+            <span class="sep">
+                /
+            </span>
 
-  function renderFileList(){
-    fileList.innerHTML = '';
-    attachedFiles.forEach((file, index) => {
-      const chip = document.createElement('div');
-      chip.className = 'file-chip';
-      const sizeKb = (file.size / 1024).toFixed(0);
-      chip.innerHTML = `<span>${escapeHtml(file.name)} · ${sizeKb} KB</span>`;
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.textContent = '✕';
-      removeBtn.addEventListener('click', () => {
-        attachedFiles.splice(index, 1);
-        renderFileList();
-      });
-      chip.appendChild(removeBtn);
-      fileList.appendChild(chip);
-    });
-  }
+            <span
+                class="current"
+                data-i18n="submitTicket"
+            >
+                Submit Ticket
+            </span>
 
-  function escapeHtml(str){
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
+        </div>
 
-  // Form submission
-  const ticketForm = document.getElementById('ticketForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const successPanel = document.getElementById('successPanel');
-  const ticketRef = document.getElementById('ticketRef');
-  const newTicketBtn = document.getElementById('newTicketBtn');
 
-  ticketForm.addEventListener('submit', function(e){
-    e.preventDefault();
+        <!-- Page Header -->
 
-    if(!ticketForm.checkValidity()){
-      ticketForm.reportValidity();
-      return;
-    }
+        <div class="page-header">
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting…';
+            <div class="header-left">
 
-    // Simulate a submission delay
-    setTimeout(() => {
-      const refNumber = 'TCK-' + Math.floor(100000 + Math.random() * 900000);
-      ticketRef.textContent = refNumber;
+                <div class="icon-square">
 
-      ticketForm.classList.add('hide');
-      successPanel.classList.add('show');
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#ffffff"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect
+                            x="3"
+                            y="3"
+                            width="7"
+                            height="7"
+                            rx="1.5"
+                        ></rect>
 
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-        Submit request
-      `;
-    }, 700);
-  });
+                        <rect
+                            x="14"
+                            y="3"
+                            width="7"
+                            height="7"
+                            rx="1.5"
+                        ></rect>
 
-  newTicketBtn.addEventListener('click', function(){
-    ticketForm.reset();
-    charCount.textContent = '0 / 800';
-    charCount.classList.remove('warn');
-    attachedFiles = [];
-    renderFileList();
-    ticketForm.classList.remove('hide');
-    successPanel.classList.remove('show');
-  });
-</script>
+                        <rect
+                            x="3"
+                            y="14"
+                            width="7"
+                            height="7"
+                            rx="1.5"
+                        ></rect>
+
+                        <rect
+                            x="14"
+                            y="14"
+                            width="7"
+                            height="7"
+                            rx="1.5"
+                        ></rect>
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <h1
+                        class="page-title"
+                        data-i18n="createTicket"
+                    >
+                        Create Support Ticket
+                    </h1>
+
+                    <p
+                        class="page-subtitle"
+                        data-i18n="pageSubtitle"
+                    >
+                        Describe your problem in your own words and our IT team will follow up with you.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <span
+                class="badge"
+                data-i18n="supportRequest"
+            >
+                Support Request
+            </span>
+
+        </div>
+
+
+        <!-- =========================
+             MAIN CARD
+        ========================= -->
+
+        <div class="card">
+
+            <form
+                id="ticketForm"
+                novalidate
+            >
+
+                <!-- Intro -->
+
+                <div class="card-intro">
+
+                    <div class="intro-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.1"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                        </svg>
+
+                    </div>
+
+
+                    <div class="intro-text">
+
+                        <h2 data-i18n="tellUs">
+                            Tell us what's going on
+                        </h2>
+
+                        <p data-i18n="tellUsDescription">
+                            Fill in your details and describe the issue in as much detail as you can — our IT team will follow up with you directly.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Form Grid -->
+
+                <div class="form-grid">
+
+                    <!-- Full Name -->
+
+                    <div class="field">
+
+                        <label for="fullName">
+
+                            <span data-i18n="fullName">
+                                Full Name
+                            </span>
+
+                            <span class="req">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            data-i18n-placeholder="fullNamePlaceholder"
+                            placeholder="e.g. Ahmed Mostafa"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="field">
+
+                        <label for="emailId">
+
+                            <span data-i18n="emailEmployee">
+                                Email / Employee ID
+                            </span>
+
+                            <span class="req">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="emailId"
+                            name="emailId"
+                            data-i18n-placeholder="emailPlaceholder"
+                            placeholder="e.g. a.mostafa@elsewedy.com or EMP-00214"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Category -->
+
+                    <div class="field">
+
+                        <label for="category">
+
+                            <span data-i18n="issueCategory">
+                                Issue Category
+                            </span>
+
+                            <span class="req">*</span>
+
+                        </label>
+
+
+                        <select
+                            id="category"
+                            name="category"
+                            required
+                        >
+
+                            <option
+                                value=""
+                                disabled
+                                selected
+                                data-i18n="selectCategory"
+                            >
+                                Select a category
+                            </option>
+
+                            <option
+                                value="hardware"
+                                data-i18n="hardware"
+                            >
+                                Hardware
+                            </option>
+
+                            <option
+                                value="software"
+                                data-i18n="software"
+                            >
+                                Software
+                            </option>
+
+                            <option
+                                value="network"
+                                data-i18n="network"
+                            >
+                                Network / Connectivity
+                            </option>
+
+                            <option
+                                value="account"
+                                data-i18n="account"
+                            >
+                                Account & Access
+                            </option>
+
+                            <option
+                                value="email"
+                                data-i18n="email"
+                            >
+                                Email & Outlook
+                            </option>
+
+                            <option
+                                value="other"
+                                data-i18n="other"
+                            >
+                                Other / Custom Issue
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Priority -->
+
+                    <div class="field">
+
+                        <label for="priority">
+
+                            <span data-i18n="priority">
+                                Priority Level
+                            </span>
+
+                            <span class="req">*</span>
+
+                        </label>
+
+
+                        <select
+                            id="priority"
+                            name="priority"
+                            required
+                        >
+
+                            <option
+                                value=""
+                                disabled
+                                selected
+                                data-i18n="selectPriority"
+                            >
+                                Select priority
+                            </option>
+
+                            <option
+                                value="low"
+                                data-i18n="low"
+                            >
+                                Low
+                            </option>
+
+                            <option
+                                value="medium"
+                                data-i18n="medium"
+                            >
+                                Medium
+                            </option>
+
+                            <option
+                                value="high"
+                                data-i18n="high"
+                            >
+                                High
+                            </option>
+
+                            <option
+                                value="critical"
+                                data-i18n="critical"
+                            >
+                                Critical
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Subject -->
+
+                    <div class="field full">
+
+                        <label for="subject">
+
+                            <span data-i18n="subject">
+                                Subject
+                            </span>
+
+                            <span class="req">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="subject"
+                            name="subject"
+                            data-i18n-placeholder="subjectPlaceholder"
+                            placeholder="Briefly summarize the issue"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="field full">
+
+                        <label for="description">
+
+                            <span data-i18n="describeIssue">
+                                Describe your issue
+                            </span>
+
+                            <span class="req">*</span>
+
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            maxlength="800"
+                            data-i18n-placeholder="descriptionPlaceholder"
+                            placeholder="Example: My laptop screen flickers randomly when connected to the docking station monitor…"
+                            required
+                        ></textarea>
+
+                        <span
+                            class="char-count"
+                            id="charCount"
+                        >
+                            0 / 800
+                        </span>
+
+                    </div>
+
+
+                    <!-- File -->
+
+                    <div class="field full">
+
+                        <label for="fileInput">
+
+                            <span data-i18n="fileAttachment">
+                                File Attachment
+                            </span>
+
+                            <span
+                                class="optional"
+                                data-i18n="optional"
+                            >
+                                (optional)
+                            </span>
+
+                        </label>
+
+
+                        <div
+                            class="file-drop"
+                            id="fileDrop"
+                        >
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                            </svg>
+
+
+                            <div class="file-drop-text">
+
+                                <span
+                                    class="main"
+                                    data-i18n="uploadMain"
+                                >
+                                    Click to upload or drag a file here
+                                </span>
+
+                                <span
+                                    class="sub"
+                                    data-i18n="uploadSub"
+                                >
+                                    Screenshots, logs, or documents — up to 10MB
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <input
+                            type="file"
+                            id="fileInput"
+                            multiple
+                        >
+
+                        <div
+                            class="file-list"
+                            id="fileList"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Footer -->
+
+                <div class="form-footer">
+
+                    <span
+                        class="footer-note"
+                        data-i18n="requiredNote"
+                    >
+                        Fields marked with * are required
+                    </span>
+
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                        id="submitBtn"
+                    >
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <line
+                                x1="22"
+                                y1="2"
+                                x2="11"
+                                y2="13"
+                            ></line>
+
+                            <polygon
+                                points="22 2 15 22 11 13 2 9 22 2"
+                            ></polygon>
+
+                        </svg>
+
+                        <span data-i18n="submitRequest">
+                            Submit request
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- =========================
+                 SUCCESS
+            ========================= -->
+
+            <div
+                class="success-panel"
+                id="successPanel"
+            >
+
+                <div class="success-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+
+                </div>
+
+
+                <h3 data-i18n="successTitle">
+                    Ticket submitted successfully
+                </h3>
+
+
+                <p data-i18n="successDescription">
+                    Our IT team has received your request and will follow up with you shortly.
+                </p>
+
+
+                <span
+                    class="ticket-ref"
+                    id="ticketRef"
+                >
+                    TCK-000000
+                </span>
+
+
+                <div>
+
+                    <button
+                        class="new-ticket-btn"
+                        id="newTicketBtn"
+                        type="button"
+                    >
+                        <span data-i18n="newTicket">
+                            Submit another ticket
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SCRIPT
+    ========================= -->
+
+    <script>
+
+        /* =========================================================
+           TICKET PAGE TRANSLATIONS
+           Uses the same localStorage key as the Chatbot
+        ========================================================= */
+
+        const TICKET_I18N = {
+
+            en: {
+
+                dir: "ltr",
+
+                goBack: "Back",
+                goHome: "Go to home page",
+                supportPortal: "Support Portal",
+
+                home: "Home",
+                submitTicket: "Submit Ticket",
+
+                createTicket: "Create Support Ticket",
+
+                pageSubtitle:
+                    "Describe your problem in your own words and our IT team will follow up with you.",
+
+                supportRequest: "Support Request",
+
+                tellUs:
+                    "Tell us what's going on",
+
+                tellUsDescription:
+                    "Fill in your details and describe the issue in as much detail as you can — our IT team will follow up with you directly.",
+
+                fullName: "Full Name",
+
+                fullNamePlaceholder:
+                    "e.g. Ahmed Mostafa",
+
+                emailEmployee:
+                    "Email / Employee ID",
+
+                emailPlaceholder:
+                    "e.g. a.mostafa@elsewedy.com or EMP-00214",
+
+                issueCategory:
+                    "Issue Category",
+
+                selectCategory:
+                    "Select a category",
+
+                hardware:
+                    "Hardware",
+
+                software:
+                    "Software",
+
+                network:
+                    "Network / Connectivity",
+
+                account:
+                    "Account & Access",
+
+                email:
+                    "Email & Outlook",
+
+                other:
+                    "Other / Custom Issue",
+
+                priority:
+                    "Priority Level",
+
+                selectPriority:
+                    "Select priority",
+
+                low:
+                    "Low",
+
+                medium:
+                    "Medium",
+
+                high:
+                    "High",
+
+                critical:
+                    "Critical",
+
+                subject:
+                    "Subject",
+
+                subjectPlaceholder:
+                    "Briefly summarize the issue",
+
+                describeIssue:
+                    "Describe your issue",
+
+                descriptionPlaceholder:
+                    "Example: My laptop screen flickers randomly when connected to the docking station monitor…",
+
+                fileAttachment:
+                    "File Attachment",
+
+                optional:
+                    "(optional)",
+
+                uploadMain:
+                    "Click to upload or drag a file here",
+
+                uploadSub:
+                    "Screenshots, logs, or documents — up to 10MB",
+
+                requiredNote:
+                    "Fields marked with * are required",
+
+                submitRequest:
+                    "Submit request",
+
+                submitting:
+                    "Submitting…",
+
+                successTitle:
+                    "Ticket submitted successfully",
+
+                successDescription:
+                    "Our IT team has received your request and will follow up with you shortly.",
+
+                newTicket:
+                    "Submit another ticket",
+
+                fileSize:
+                    "KB"
+
+            },
+
+
+            ar: {
+
+                dir: "rtl",
+
+                goBack:
+                    "رجوع",
+
+                goHome:
+                    "الذهاب إلى الصفحة الرئيسية",
+
+                supportPortal:
+                    "بوابة الدعم",
+
+                home:
+                    "الرئيسية",
+
+                submitTicket:
+                    "إرسال تذكرة",
+
+                createTicket:
+                    "إنشاء تذكرة دعم",
+
+                pageSubtitle:
+                    "اشرح مشكلتك بطريقتك وسيتابع معك فريق تكنولوجيا المعلومات.",
+
+                supportRequest:
+                    "طلب دعم",
+
+                tellUs:
+                    "أخبرنا بما يحدث",
+
+                tellUsDescription:
+                    "أدخل بياناتك واشرح المشكلة بالتفصيل قدر الإمكان — وسيتابع معك فريق تكنولوجيا المعلومات مباشرة.",
+
+                fullName:
+                    "الاسم بالكامل",
+
+                fullNamePlaceholder:
+                    "مثال: أحمد مصطفى",
+
+                emailEmployee:
+                    "البريد الإلكتروني / رقم الموظف",
+
+                emailPlaceholder:
+                    "مثال: a.mostafa@elsewedy.com أو EMP-00214",
+
+                issueCategory:
+                    "نوع المشكلة",
+
+                selectCategory:
+                    "اختر نوع المشكلة",
+
+                hardware:
+                    "أجهزة ومعدات",
+
+                software:
+                    "البرامج",
+
+                network:
+                    "الشبكة / الاتصال",
+
+                account:
+                    "الحسابات والصلاحيات",
+
+                email:
+                    "البريد الإلكتروني وأوتلوك",
+
+                other:
+                    "مشكلة أخرى / مخصصة",
+
+                priority:
+                    "مستوى الأولوية",
+
+                selectPriority:
+                    "اختر الأولوية",
+
+                low:
+                    "منخفضة",
+
+                medium:
+                    "متوسطة",
+
+                high:
+                    "عالية",
+
+                critical:
+                    "حرجة",
+
+                subject:
+                    "عنوان المشكلة",
+
+                subjectPlaceholder:
+                    "اكتب ملخصًا مختصرًا للمشكلة",
+
+                describeIssue:
+                    "اشرح المشكلة",
+
+                descriptionPlaceholder:
+                    "مثال: شاشة اللابتوب تومض بشكل عشوائي عند توصيلها بشاشة الـ Docking Station…",
+
+                fileAttachment:
+                    "إرفاق ملف",
+
+                optional:
+                    "(اختياري)",
+
+                uploadMain:
+                    "اضغط لرفع ملف أو اسحب الملف هنا",
+
+                uploadSub:
+                    "صور شاشة أو سجلات أو مستندات — حتى 10 ميجابايت",
+
+                requiredNote:
+                    "الحقول التي تحتوي على * مطلوبة",
+
+                submitRequest:
+                    "إرسال الطلب",
+
+                submitting:
+                    "جاري الإرسال…",
+
+                successTitle:
+                    "تم إرسال التذكرة بنجاح",
+
+                successDescription:
+                    "استلم فريق تكنولوجيا المعلومات طلبك وسيتواصل معك قريبًا.",
+
+                newTicket:
+                    "إرسال تذكرة أخرى",
+
+                fileSize:
+                    "كيلوبايت"
+
+            },
+
+
+            es: {
+
+                dir: "ltr",
+
+                goBack:
+                    "Volver",
+
+                goHome:
+                    "Ir a la página principal",
+
+                supportPortal:
+                    "Portal de soporte",
+
+                home:
+                    "Inicio",
+
+                submitTicket:
+                    "Enviar ticket",
+
+                createTicket:
+                    "Crear ticket de soporte",
+
+                pageSubtitle:
+                    "Describe tu problema con tus propias palabras y nuestro equipo de TI se pondrá en contacto contigo.",
+
+                supportRequest:
+                    "Solicitud de soporte",
+
+                tellUs:
+                    "Cuéntanos qué ocurre",
+
+                tellUsDescription:
+                    "Completa tus datos y describe el problema con el mayor detalle posible — nuestro equipo de TI se pondrá en contacto contigo directamente.",
+
+                fullName:
+                    "Nombre completo",
+
+                fullNamePlaceholder:
+                    "Ej.: Ahmed Mostafa",
+
+                emailEmployee:
+                    "Correo electrónico / ID de empleado",
+
+                emailPlaceholder:
+                    "Ej.: a.mostafa@elsewedy.com o EMP-00214",
+
+                issueCategory:
+                    "Categoría del problema",
+
+                selectCategory:
+                    "Selecciona una categoría",
+
+                hardware:
+                    "Hardware",
+
+                software:
+                    "Software",
+
+                network:
+                    "Red / Conectividad",
+
+                account:
+                    "Cuenta y acceso",
+
+                email:
+                    "Correo electrónico y Outlook",
+
+                other:
+                    "Otro / Problema personalizado",
+
+                priority:
+                    "Nivel de prioridad",
+
+                selectPriority:
+                    "Selecciona la prioridad",
+
+                low:
+                    "Baja",
+
+                medium:
+                    "Media",
+
+                high:
+                    "Alta",
+
+                critical:
+                    "Crítica",
+
+                subject:
+                    "Asunto",
+
+                subjectPlaceholder:
+                    "Resume brevemente el problema",
+
+                describeIssue:
+                    "Describe tu problema",
+
+                descriptionPlaceholder:
+                    "Ejemplo: La pantalla de mi portátil parpadea aleatoriamente cuando está conectada al monitor de la estación de acoplamiento…",
+
+                fileAttachment:
+                    "Archivo adjunto",
+
+                optional:
+                    "(opcional)",
+
+                uploadMain:
+                    "Haz clic para subir un archivo o arrástralo aquí",
+
+                uploadSub:
+                    "Capturas de pantalla, registros o documentos — hasta 10 MB",
+
+                requiredNote:
+                    "Los campos marcados con * son obligatorios",
+
+                submitRequest:
+                    "Enviar solicitud",
+
+                submitting:
+                    "Enviando…",
+
+                successTitle:
+                    "Ticket enviado correctamente",
+
+                successDescription:
+                    "Nuestro equipo de TI ha recibido tu solicitud y se pondrá en contacto contigo en breve.",
+
+                newTicket:
+                    "Enviar otro ticket",
+
+                fileSize:
+                    "KB"
+
+            },
+
+
+            zh: {
+
+                dir: "ltr",
+
+                goBack:
+                    "返回",
+
+                goHome:
+                    "返回主页",
+
+                supportPortal:
+                    "支持门户",
+
+                home:
+                    "主页",
+
+                submitTicket:
+                    "提交工单",
+
+                createTicket:
+                    "创建支持工单",
+
+                pageSubtitle:
+                    "请用自己的话描述问题，我们的 IT 团队会跟进处理。",
+
+                supportRequest:
+                    "支持请求",
+
+                tellUs:
+                    "告诉我们发生了什么",
+
+                tellUsDescription:
+                    "填写您的信息并尽可能详细地描述问题 — 我们的 IT 团队会直接与您联系。",
+
+                fullName:
+                    "姓名",
+
+                fullNamePlaceholder:
+                    "例如：Ahmed Mostafa",
+
+                emailEmployee:
+                    "电子邮箱 / 员工编号",
+
+                emailPlaceholder:
+                    "例如：a.mostafa@elsewedy.com 或 EMP-00214",
+
+                issueCategory:
+                    "问题类别",
+
+                selectCategory:
+                    "选择问题类别",
+
+                hardware:
+                    "硬件",
+
+                software:
+                    "软件",
+
+                network:
+                    "网络 / 连接",
+
+                account:
+                    "账户与访问权限",
+
+                email:
+                    "电子邮件与 Outlook",
+
+                other:
+                    "其他 / 自定义问题",
+
+                priority:
+                    "优先级",
+
+                selectPriority:
+                    "选择优先级",
+
+                low:
+                    "低",
+
+                medium:
+                    "中",
+
+                high:
+                    "高",
+
+                critical:
+                    "紧急",
+
+                subject:
+                    "主题",
+
+                subjectPlaceholder:
+                    "简要概述问题",
+
+                describeIssue:
+                    "描述您的问题",
+
+                descriptionPlaceholder:
+                    "例如：我的笔记本电脑连接到扩展坞显示器时，屏幕会随机闪烁…",
+
+                fileAttachment:
+                    "文件附件",
+
+                optional:
+                    "（可选）",
+
+                uploadMain:
+                    "点击上传文件或将文件拖到这里",
+
+                uploadSub:
+                    "屏幕截图、日志或文档 — 最大 10MB",
+
+                requiredNote:
+                    "带有 * 的字段为必填项",
+
+                submitRequest:
+                    "提交请求",
+
+                submitting:
+                    "正在提交…",
+
+                successTitle:
+                    "工单提交成功",
+
+                successDescription:
+                    "我们的 IT 团队已收到您的请求，并会尽快与您联系。",
+
+                newTicket:
+                    "提交另一张工单",
+
+                fileSize:
+                    "KB"
+            }
+
+        };
+
+
+        /* =========================================================
+           LANGUAGE
+        ========================================================= */
+
+        const STORAGE_KEY = "swe_it_chat_lang";
+
+
+        function getSavedLanguage() {
+
+            try {
+
+                const saved =
+                    localStorage.getItem(STORAGE_KEY);
+
+                if (
+                    saved &&
+                    TICKET_I18N[saved]
+                ) {
+                    return saved;
+                }
+
+            } catch (error) {}
+
+            return "en";
+        }
+
+
+        function applyLanguage(code) {
+
+            if (!TICKET_I18N[code]) {
+                code = "en";
+            }
+
+            const t =
+                TICKET_I18N[code];
+
+
+            /* HTML language + direction */
+
+            document.documentElement.lang = code;
+
+            document.documentElement.dir = t.dir;
+
+
+            /* Normal text */
+
+            document
+                .querySelectorAll("[data-i18n]")
+                .forEach(function (element) {
+
+                    const key =
+                        element.getAttribute("data-i18n");
+
+                    if (t[key] !== undefined) {
+
+                        element.textContent =
+                            t[key];
+
+                    }
+
+                });
+
+
+            /* Placeholders */
+
+            document
+                .querySelectorAll("[data-i18n-placeholder]")
+                .forEach(function (element) {
+
+                    const key =
+                        element.getAttribute(
+                            "data-i18n-placeholder"
+                        );
+
+                    if (t[key] !== undefined) {
+
+                        element.placeholder =
+                            t[key];
+
+                    }
+
+                });
+
+
+            /* Titles */
+
+            document
+                .querySelectorAll("[data-i18n-title]")
+                .forEach(function (element) {
+
+                    const key =
+                        element.getAttribute(
+                            "data-i18n-title"
+                        );
+
+                    if (t[key] !== undefined) {
+
+                        element.title =
+                            t[key];
+
+                        element.setAttribute(
+                            "aria-label",
+                            t[key]
+                        );
+
+                    }
+
+                });
+
+
+            /* Current language */
+
+            const currentLabel =
+                document.getElementById(
+                    "lang-current"
+                );
+
+            if (currentLabel) {
+
+                currentLabel.textContent =
+                    code.toUpperCase();
+
+            }
+
+
+            /* Active language */
+
+            document
+                .querySelectorAll(".lang-option")
+                .forEach(function (button) {
+
+                    button.classList.toggle(
+                        "is-active",
+                        button.getAttribute("data-lang") === code
+                    );
+
+                });
+
+
+            /* Save */
+
+            try {
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    code
+                );
+
+            } catch (error) {}
+
+
+            window.SWE_TICKET_LANG = code;
+        }
+
+
+        /* =========================================================
+           LANGUAGE SWITCHER
+        ========================================================= */
+
+        const langTrigger =
+            document.getElementById("lang-trigger");
+
+        const langMenu =
+            document.getElementById("lang-menu");
+
+
+        langTrigger.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+                const isOpen =
+                    langMenu.classList.toggle(
+                        "is-open"
+                    );
+
+                langTrigger.setAttribute(
+                    "aria-expanded",
+                    isOpen
+                );
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(".lang-option")
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const language =
+                            this.getAttribute(
+                                "data-lang"
+                            );
+
+                        applyLanguage(language);
+
+                        langMenu.classList.remove(
+                            "is-open"
+                        );
+
+                        langTrigger.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
+                );
+
+            });
+
+
+        document.addEventListener(
+            "click",
+            function () {
+
+                langMenu.classList.remove(
+                    "is-open"
+                );
+
+                langTrigger.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           BACK BUTTON
+        ========================================================= */
+
+        document
+            .getElementById("backBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    window.history.back();
+
+                }
+            );
+
+
+        /* =========================================================
+           CHARACTER COUNTER
+        ========================================================= */
+
+        const description =
+            document.getElementById(
+                "description"
+            );
+
+        const charCount =
+            document.getElementById(
+                "charCount"
+            );
+
+
+        description.addEventListener(
+            "input",
+            function () {
+
+                const len =
+                    description.value.length;
+
+                charCount.textContent =
+                    len + " / 800";
+
+                charCount.classList.toggle(
+                    "warn",
+                    len >= 750
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           FILE UPLOAD
+        ========================================================= */
+
+        const fileDrop =
+            document.getElementById(
+                "fileDrop"
+            );
+
+        const fileInput =
+            document.getElementById(
+                "fileInput"
+            );
+
+        const fileList =
+            document.getElementById(
+                "fileList"
+            );
+
+
+        let attachedFiles = [];
+
+
+        fileDrop.addEventListener(
+            "click",
+            function () {
+
+                fileInput.click();
+
+            }
+        );
+
+
+        fileDrop.addEventListener(
+            "dragover",
+            function (event) {
+
+                event.preventDefault();
+
+                fileDrop.style.borderColor =
+                    "var(--red)";
+
+                fileDrop.style.background =
+                    "var(--red-light)";
+
+            }
+        );
+
+
+        fileDrop.addEventListener(
+            "dragleave",
+            function () {
+
+                fileDrop.style.borderColor =
+                    "";
+
+                fileDrop.style.background =
+                    "";
+
+            }
+        );
+
+
+        fileDrop.addEventListener(
+            "drop",
+            function (event) {
+
+                event.preventDefault();
+
+                fileDrop.style.borderColor =
+                    "";
+
+                fileDrop.style.background =
+                    "";
+
+                handleFiles(
+                    event.dataTransfer.files
+                );
+
+            }
+        );
+
+
+        fileInput.addEventListener(
+            "change",
+            function () {
+
+                handleFiles(
+                    fileInput.files
+                );
+
+            }
+        );
+
+
+        function handleFiles(fileArray) {
+
+            Array
+                .from(fileArray)
+                .forEach(function (file) {
+
+                    attachedFiles.push(file);
+
+                });
+
+            renderFileList();
+        }
+
+
+        function renderFileList() {
+
+            fileList.innerHTML = "";
+
+            const language =
+                window.SWE_TICKET_LANG || "en";
+
+            const t =
+                TICKET_I18N[language];
+
+
+            attachedFiles.forEach(
+                function (file, index) {
+
+                    const chip =
+                        document.createElement(
+                            "div"
+                        );
+
+                    chip.className =
+                        "file-chip";
+
+
+                    const sizeKb =
+                        (file.size / 1024)
+                            .toFixed(0);
+
+
+                    const nameSpan =
+                        document.createElement(
+                            "span"
+                        );
+
+                    nameSpan.textContent =
+                        file.name +
+                        " · " +
+                        sizeKb +
+                        " " +
+                        t.fileSize;
+
+
+                    chip.appendChild(
+                        nameSpan
+                    );
+
+
+                    const removeBtn =
+                        document.createElement(
+                            "button"
+                        );
+
+                    removeBtn.type =
+                        "button";
+
+                    removeBtn.textContent =
+                        "✕";
+
+
+                    removeBtn.addEventListener(
+                        "click",
+                        function () {
+
+                            attachedFiles.splice(
+                                index,
+                                1
+                            );
+
+                            renderFileList();
+
+                        }
+                    );
+
+
+                    chip.appendChild(
+                        removeBtn
+                    );
+
+                    fileList.appendChild(
+                        chip
+                    );
+
+                }
+            );
+        }
+
+
+        /* =========================================================
+           FORM SUBMISSION
+        ========================================================= */
+
+        const ticketForm =
+            document.getElementById(
+                "ticketForm"
+            );
+
+        const submitBtn =
+            document.getElementById(
+                "submitBtn"
+            );
+
+        const successPanel =
+            document.getElementById(
+                "successPanel"
+            );
+
+        const ticketRef =
+            document.getElementById(
+                "ticketRef"
+            );
+
+        const newTicketBtn =
+            document.getElementById(
+                "newTicketBtn"
+            );
+
+
+        ticketForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+
+                if (
+                    !ticketForm.checkValidity()
+                ) {
+
+                    ticketForm.reportValidity();
+
+                    return;
+
+                }
+
+
+                submitBtn.disabled =
+                    true;
+
+
+                const language =
+                    window.SWE_TICKET_LANG ||
+                    "en";
+
+                submitBtn
+                    .querySelector(
+                        "span"
+                    )
+                    .textContent =
+                    TICKET_I18N[
+                        language
+                    ].submitting;
+
+
+                /* Simulation */
+
+                setTimeout(
+                    function () {
+
+                        const refNumber =
+                            "TCK-" +
+                            Math.floor(
+                                100000 +
+                                Math.random() *
+                                900000
+                            );
+
+
+                        ticketRef.textContent =
+                            refNumber;
+
+
+                        ticketForm.classList.add(
+                            "hide"
+                        );
+
+
+                        successPanel.classList.add(
+                            "show"
+                        );
+
+
+                        submitBtn.disabled =
+                            false;
+
+
+                        submitBtn
+                            .querySelector(
+                                "span"
+                            )
+                            .textContent =
+                            TICKET_I18N[
+                                language
+                            ].submitRequest;
+
+                    },
+                    700
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           NEW TICKET
+        ========================================================= */
+
+        newTicketBtn.addEventListener(
+            "click",
+            function () {
+
+                ticketForm.reset();
+
+                charCount.textContent =
+                    "0 / 800";
+
+                charCount.classList.remove(
+                    "warn"
+                );
+
+                attachedFiles = [];
+
+                renderFileList();
+
+                ticketForm.classList.remove(
+                    "hide"
+                );
+
+                successPanel.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           INITIAL LANGUAGE
+        ========================================================= */
+
+        applyLanguage(
+            getSavedLanguage()
+        );
+
+    </script>
 
 </body>
+
 </html>

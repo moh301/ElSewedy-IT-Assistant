@@ -40,13 +40,13 @@
 
             <a href="../index.html" class="brand-mark">
 
-    <img
-        src="../assets/logo.gif"
-        alt="ELSEWEDY ELECTRIC"
-        class="brand-logo"
-    >
-</a>
+                <img
+                    src="../assets/logo.gif"
+                    alt="ELSEWEDY ELECTRIC"
+                    class="brand-logo"
+                >
 
+            </a>
 
             <span class="brand-product">
                 IT Assist
@@ -88,18 +88,23 @@
 
             </svg>
 
-            New Chat
+            <span data-i18n="newChat">
+                New Chat
+            </span>
 
         </button>
 
 
         <!-- =================================================
-             PINNED ISSUES (STATIC — DO NOT MODIFY VIA JS)
+             PINNED ISSUES
         ================================================== -->
 
         <div class="history-section">
 
-            <span class="history-label">
+            <span
+                class="history-label"
+                data-i18n="pinnedLabel"
+            >
                 Pinned
             </span>
 
@@ -140,8 +145,10 @@
 
                     </svg>
 
-
-                    <span class="history-title">
+                    <span
+                        class="history-title"
+                        data-i18n="pinNetwork"
+                    >
                         Network / Wi-Fi Issues
                     </span>
 
@@ -177,8 +184,10 @@
 
                     </svg>
 
-
-                    <span class="history-title">
+                    <span
+                        class="history-title"
+                        data-i18n="pinAccounts"
+                    >
                         Accounts / Passwords Issues
                     </span>
 
@@ -212,8 +221,10 @@
 
                     </svg>
 
-
-                    <span class="history-title">
+                    <span
+                        class="history-title"
+                        data-i18n="pinMail"
+                    >
                         Mails / Outlook Issues
                     </span>
 
@@ -251,8 +262,10 @@
 
                     </svg>
 
-
-                    <span class="history-title">
+                    <span
+                        class="history-title"
+                        data-i18n="pinPrinting"
+                    >
                         Printing Issues
                     </span>
 
@@ -290,8 +303,10 @@
 
                     </svg>
 
-
-                    <span class="history-title">
+                    <span
+                        class="history-title"
+                        data-i18n="pinSoftware"
+                    >
                         Software / Applications Issues
                     </span>
 
@@ -303,14 +318,17 @@
 
 
         <!-- =================================================
-             RECENT (DYNAMIC — POPULATED BY script.js FROM localStorage)
+             RECENT
         ================================================== -->
 
         <div
             class="history-section history-section--scroll"
         >
 
-            <span class="history-label">
+            <span
+                class="history-label"
+                data-i18n="recentLabel"
+            >
                 Recent
             </span>
 
@@ -320,9 +338,11 @@
                 id="recent-history"
             >
 
-                <!-- Recent chat sessions are injected here dynamically -->
-
-                <li class="history-empty" id="recent-empty">
+                <li
+                    class="history-empty"
+                    id="recent-empty"
+                    data-i18n="recentEmpty"
+                >
                     No recent chats yet
                 </li>
 
@@ -373,6 +393,7 @@
                     type="button"
                     aria-label="Go back"
                     title="Go Back"
+                    data-i18n-title="goBack"
                 >
 
                     <svg
@@ -408,6 +429,7 @@
                     type="button"
                     aria-label="Toggle sidebar"
                     title="Toggle Sidebar"
+                    data-i18n-title="toggleSidebar"
                 >
 
                     <svg
@@ -447,20 +469,119 @@
                     SWE IT Assist
                 </h1>
 
-                <span>
+                <span data-i18n="headerOnline">
                     Online now
                 </span>
 
             </div>
 
 
-            <a
-            href="../ticket.html"
-            class="workspace-status"
-            title="Open Tickets"
-        >
+            <!-- LANGUAGE + TICKET -->
 
-        <svg
+            <div class="header-right">
+
+                <!-- LANGUAGE SWITCHER -->
+
+                <div
+                    class="lang-switch"
+                    id="lang-switch"
+                >
+
+                    <button
+                        type="button"
+                        class="lang-trigger"
+                        id="lang-trigger"
+                        aria-label="Change language"
+                        title="Change language"
+                    >
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                            ></circle>
+
+                            <line
+                                x1="2"
+                                y1="12"
+                                x2="22"
+                                y2="12"
+                            ></line>
+
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                            ></path>
+
+                        </svg>
+
+                        <span id="lang-current">
+                            EN
+                        </span>
+
+                    </button>
+
+
+                    <div
+                        class="lang-menu"
+                        id="lang-menu"
+                    >
+
+                        <button
+                            type="button"
+                            class="lang-option"
+                            data-lang="en"
+                        >
+                            English
+                        </button>
+
+                        <button
+                            type="button"
+                            class="lang-option"
+                            data-lang="ar"
+                        >
+                            العربية
+                        </button>
+
+                        <button
+                            type="button"
+                            class="lang-option"
+                            data-lang="es"
+                        >
+                            Español
+                        </button>
+
+                        <button
+                            type="button"
+                            class="lang-option"
+                            data-lang="zh"
+                        >
+                            中文
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TICKET BUTTON -->
+
+                <a
+                    href="../ticket.html"
+                    class="workspace-status"
+                    title="Open Tickets"
+                    data-i18n-title="openTickets"
+                >
+
+                    <svg
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -487,11 +608,17 @@
 
                     </svg>
 
-            <span class="pulse-dot pulse-dot--sm"></span>
+                    <span
+                        class="pulse-dot pulse-dot--sm"
+                    ></span>
 
-            Send a Ticket
+                    <span data-i18n="sendTicket">
+                        Send a Ticket
+                    </span>
 
-            </a>
+                </a>
+
+            </div>
 
         </header>
 
@@ -507,11 +634,16 @@
 
             <div class="message bot-message">
 
-                <div class="bot-heading">
+                <div
+                    class="bot-heading"
+                    data-i18n="welcomeHeading"
+                >
                     Welcome to SWE IT Assist
                 </div>
 
-                Hello! How can I help you today?
+                <span data-i18n="welcomeBody">
+                    Hello! How can I help you today?
+                </span>
 
             </div>
 
@@ -531,6 +663,7 @@
                     id="message-input"
                     placeholder="Message SWE IT Assist..."
                     autocomplete="off"
+                    data-i18n-placeholder="composerPlaceholder"
                 >
 
 
@@ -538,6 +671,8 @@
                     id="send-button"
                     type="button"
                     aria-label="Send message"
+                    title="Send message"
+                    data-i18n-title="sendMessage"
                 >
 
                     <svg
@@ -567,11 +702,12 @@
             </div>
 
 
-            <span class="composer-hint">
-
+            <span
+                class="composer-hint"
+                data-i18n="composerHint"
+            >
                 SWE IT Assist can make mistakes.
                 Verify critical steps with the IT helpdesk.
-
             </span>
 
         </div>
@@ -583,6 +719,7 @@
 </div>
 
 
+<script src="i18n-chat.js"></script>
 <script src="script.js"></script>
 
 </body>
