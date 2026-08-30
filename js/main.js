@@ -211,6 +211,30 @@ const HOME_LAUNCHERS = [
     { iconKey: "calendar", titleKey: "bookingTitle", descKey: "bookingDesc", href: "booking.html" }
 ];
 
+// Time-of-day greeting on the homepage hero, using the signed-in
+// employee's first name (from js/auth.js's getAuthUser()). Hidden if
+// nobody's signed in yet (shouldn't normally happen — index.html
+// requires auth — but keeps this safe either way).
+function renderHeroGreeting(ui) {
+    const el = document.getElementById("heroGreeting");
+    if (!el) return;
+
+    const user = typeof getAuthUser === "function" ? getAuthUser() : null;
+    if (!user || !user.name) {
+        el.hidden = true;
+        return;
+    }
+
+    const firstName = user.name.trim().split(/\s+/)[0];
+    const hour = new Date().getHours();
+    const greet = hour < 12 ? ui.greetingMorning
+        : hour < 18 ? ui.greetingAfternoon
+        : ui.greetingEvening;
+
+    el.textContent = greet(firstName);
+    el.hidden = false;
+}
+
 function renderIndexPage(code) {
     const ui = I18N[code].ui;
 
@@ -218,6 +242,7 @@ function renderIndexPage(code) {
 
     setText("productTag", ui.productTag);
     setText("heroEyebrow", ui.heroEyebrow);
+    renderHeroGreeting(ui);
     setHTML("heroTitle", ui.heroTitleHtml);
     setText("heroSubtitle", ui.heroSubtitle);
     setText("footerNote", ui.footerNote);
@@ -693,17 +718,4 @@ document.addEventListener("DOMContentLoaded", () => {
     const code = detectInitialLang();
     applyDocumentDirection(code);
     renderCurrentPage(code);
-});
-
-/* Re-apply the saved language whenever this page is restored from the
-   browser's back/forward cache (bfcache). Without this, navigating back
-   to a page (e.g. after changing the language on the ticket or chatbot
-   page) can show a stale, previously-rendered language because the page
-   is restored from cache without re-running the scripts above. */
-window.addEventListener("pageshow", (e) => {
-    if (e.persisted) {
-        const code = detectInitialLang();
-        applyDocumentDirection(code);
-        renderCurrentPage(code);
-    }
 });

@@ -673,6 +673,17 @@ button {
     background: var(--brand);
 }
 
+.hero-greeting {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--brand);
+    margin-bottom: 8px;
+}
+
+.hero-greeting[hidden] {
+    display: none;
+}
+
 .hero h1 {
     font-family: 'Space Grotesk', 'Cairo', 'Noto Sans SC', 'Inter', sans-serif;
     font-size: 54px;
