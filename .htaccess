@@ -1,0 +1,19 @@
+# Stop the browser from serving a stale cached copy of the page shell
+# itself. Linked assets (css/js) are cache-busted with a "?v=" query
+# string that's bumped whenever their content changes, but the HTML
+# documents (index.html, ticket.html, chatbot/index.html, etc.) are not
+# — without this, a browser can keep showing an old HTML file (with old
+# <script src="...?v=OLD"> tags) even after the referenced JS/CSS has
+# been updated on the server, which is exactly what caused the language
+# switcher to look "broken" on some pages after an update: the page
+# itself was stale, not the language logic.
+#
+# "no-cache" here does NOT mean "never cache" — it means the browser
+# must revalidate with the server (a fast 304 Not Modified round-trip)
+# before reusing a cached copy, so this stays cheap while guaranteeing
+# every navigation sees the current file.
+<IfModule mod_headers.c>
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>

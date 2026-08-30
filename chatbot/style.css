@@ -563,7 +563,7 @@ input {
 
     font-weight: 600;
 
-    color: #DAE1EC;
+    color: var(--ink);
 }
 
 

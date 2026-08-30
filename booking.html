@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWE IT Assist</title>
+    <title>Booking — SWE IT Assist</title>
     <link rel="stylesheet" href="css/style.css?v=20260828-3">
 </head>
-<body data-page="index">
+<body data-page="booking">
 
     <script src="js/auth.js"></script>
 
@@ -42,6 +42,10 @@
 
         <div class="header-right">
             <div class="lang-switcher" id="langSwitcher"></div>
+            <a class="back-link" href="index.html">
+                <span class="back-arrow" data-icon="arrowLeft"></span>
+                <span id="backLabel">Home</span>
+            </a>
             <div class="user-menu">
                 <span class="user-menu-name" data-auth-name></span>
                 <button type="button" class="logout-btn" data-auth-logout aria-label="Log out" title="Log out">
@@ -54,17 +58,23 @@
     <!-- ================= MAIN ================= -->
     <main class="container">
 
-        <section class="hero hero--home fade-up">
-            <span class="eyebrow" id="heroEyebrow">IT Self-Service</span>
-            <h1 id="heroTitle">How can we help <span class="accent">you</span> today?</h1>
-            <p id="heroSubtitle">Loading…</p>
+        <nav class="breadcrumbs fade-up">
+            <a href="index.html" id="crumbHome">Home</a>
+            <span class="sep">/</span>
+            <span class="current" id="crumbCurrent">Booking</span>
+        </nav>
+
+        <section class="hero fade-up" style="margin-bottom:0;">
+            <h1 id="pageTitle" style="font-size:36px;">Booking</h1>
+            <p id="pageSubtitle">Loading…</p>
         </section>
 
-        <!-- ================= HOME LAUNCHER TILES ================= -->
-        <section class="launcher-grid stagger" id="categoryGrid"></section>
-        <p class="search-empty" id="searchEmpty" hidden></p>
-
-        <p class="footer-note" id="footerNote"></p>
+        <!-- ================= PLACEHOLDER ================= -->
+        <section class="placeholder-panel fade-up">
+            <div class="placeholder-icon" data-icon="clock"></div>
+            <h2 id="comingSoonTitle">Coming soon</h2>
+            <p id="comingSoonDesc">Loading…</p>
+        </section>
 
     </main>
 

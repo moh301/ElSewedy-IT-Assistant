@@ -68,7 +68,11 @@ const ICONS = {
     penModern: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>`,
     globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18"/><path d="M12 3a14 14 0 0 0 0 18"/></svg>`,
     search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>`,
-    logout: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>`
+    logout: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>`,
+    clock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>`,
+    headset: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 18 0"/><rect x="3" y="12" width="4.5" height="7.5" rx="1.6"/><rect x="16.5" y="12" width="4.5" height="7.5" rx="1.6"/><path d="M19.5 19.5v.5a3 3 0 0 1-3 3h-2.5"/></svg>`,
+    appsGear: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8 20.5h8"/><path d="M12 16.5v4"/><circle cx="12" cy="10.25" r="2.6"/></svg>`,
+    calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18"/><path d="M8 3v4"/><path d="M16 3v4"/><rect x="7" y="13" width="4" height="4" rx="0.8" fill="currentColor" stroke="none"/></svg>`
 };
 
 /* ---------- Two-tone tile icons for the homepage category grid ---------- */
@@ -78,7 +82,10 @@ const TILE_ICONS = {
     email: `<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="12" width="30" height="22" rx="3" stroke="#17324d" stroke-width="2.4"/><path d="M7 14 21 25 35 14" stroke="#17324d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="12" r="5" fill="#a9002c"/></svg>`,
     printing: `<svg viewBox="0 0 48 48" fill="none"><path d="M12 18V8H32V18" stroke="#17324d" stroke-width="2.4" stroke-linejoin="round"/><rect x="8" y="18" width="28" height="14" rx="2.5" stroke="#17324d" stroke-width="2.4"/><rect x="14" y="26" width="16" height="12" rx="1" fill="#a9002c"/></svg>`,
     software: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="9" width="30" height="24" rx="3" stroke="#17324d" stroke-width="2.4"/><path d="M7 16H37" stroke="#17324d" stroke-width="2.4"/><circle cx="12" cy="12.5" r="1.3" fill="#17324d"/><circle cx="16.5" cy="12.5" r="1.3" fill="#17324d"/><rect x="14" y="21" width="16" height="8" rx="1.5" fill="#a9002c"/></svg>`,
-    other: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="7" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="26" y="7" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="7" y="26" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="26" y="26" width="15" height="15" rx="3" fill="#a9002c"/></svg>`
+    other: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="7" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="26" y="7" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="7" y="26" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="26" y="26" width="15" height="15" rx="3" fill="#a9002c"/></svg>`,
+    hub: `<svg viewBox="0 0 48 48" fill="none"><path d="M10 24v-2a14 14 0 0 1 28 0v2" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><rect x="6" y="22" width="8" height="14" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="34" y="22" width="8" height="14" rx="3" fill="#a9002c"/><path d="M38 36v2a4 4 0 0 1-4 4h-6" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+    appsSupport: `<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="24" rx="3" stroke="#17324d" stroke-width="2.4"/><path d="M17 40h14" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><path d="M24 32v8" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><path d="M24 14.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z" stroke="#17324d" stroke-width="2.2"/><circle cx="24" cy="20" r="2" fill="#a9002c"/></svg>`,
+    booking: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="10" width="34" height="30" rx="3" stroke="#17324d" stroke-width="2.4"/><path d="M7 18h34" stroke="#17324d" stroke-width="2.4"/><path d="M15 6v8M33 6v8" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><rect x="15" y="24" width="8" height="8" rx="1.5" fill="#a9002c"/><rect x="27" y="24" width="6" height="6" rx="1.5" stroke="#17324d" stroke-width="2"/></svg>`
 };
 
 function tileIcon(key) {
@@ -193,9 +200,19 @@ function getParam(name) {
 }
 
 /* ---------- INDEX PAGE ---------- */
+// The homepage no longer lists all six issue categories directly — it
+// shows a small set of launcher tiles (same look as a category card):
+// "IT Support" leads to the dedicated support.html hub (where the six-tile
+// grid now lives — see renderSupportPage below), plus "Apps Support" and
+// "Booking", which are their own simple placeholder pages for now.
+const HOME_LAUNCHERS = [
+    { iconKey: "headset", titleKey: "itSupportTitle", descKey: "itSupportDesc", href: "support.html" },
+    { iconKey: "appsGear", titleKey: "appsSupportTitle", descKey: "appsSupportDesc", href: "apps-support.html" },
+    { iconKey: "calendar", titleKey: "bookingTitle", descKey: "bookingDesc", href: "booking.html" }
+];
+
 function renderIndexPage(code) {
     const ui = I18N[code].ui;
-    const categories = I18N[code].categories;
 
     document.title = `SWE IT Assist`;
 
@@ -204,6 +221,77 @@ function renderIndexPage(code) {
     setHTML("heroTitle", ui.heroTitleHtml);
     setText("heroSubtitle", ui.heroSubtitle);
     setText("footerNote", ui.footerNote);
+
+    const grid = document.getElementById("categoryGrid");
+    if (grid) {
+        grid.innerHTML = "";
+        HOME_LAUNCHERS.forEach((item, i) => {
+            const card = document.createElement("div");
+            card.className = "launcher-card fade-up";
+            card.setAttribute("tabindex", "0");
+            card.setAttribute("role", "button");
+            card.style.animationDelay = `${Math.min(i * 0.06, 0.3)}s`;
+
+            card.innerHTML = `
+                <div class="launcher-icon-badge">${icon(item.iconKey)}</div>
+                <div class="launcher-title">${escapeHTML(ui[item.titleKey])}</div>
+                <p class="launcher-desc">${escapeHTML(ui[item.descKey])}</p>
+                <span class="launcher-arrow"><span>${escapeHTML(ui.getStarted)}</span>${icon("arrowRight")}</span>
+            `;
+
+            const go = () => { window.location.href = item.href; };
+            card.addEventListener("click", go);
+            card.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); }
+            });
+
+            grid.appendChild(card);
+        });
+    }
+
+    paintStaticIcons();
+    renderLanguageSwitcher(code);
+    initHeaderSearch(code);
+    wireAuthChrome(ui);
+}
+
+/* ---------- PLACEHOLDER PAGES (Apps Support, Booking) ---------- */
+// Simple "coming soon" pages sharing the same header/breadcrumb/hero
+// pattern as support.html — just a dashed placeholder card instead of
+// real content, until each of these gets built out.
+function renderPlaceholderPage(code, titleKey, descKey) {
+    const ui = I18N[code].ui;
+
+    document.title = `${ui[titleKey]}${ui.titleSuffix}`;
+
+    setText("productTag", ui.productTag);
+    setText("backLabel", ui.breadcrumbHome);
+    setText("crumbHome", ui.breadcrumbHome);
+    setText("crumbCurrent", ui[titleKey]);
+    setText("pageTitle", ui[titleKey]);
+    setText("pageSubtitle", ui[descKey]);
+    setText("comingSoonTitle", ui.comingSoonTitle);
+    setText("comingSoonDesc", ui.comingSoonDesc);
+
+    paintStaticIcons();
+    renderLanguageSwitcher(code);
+    initHeaderSearch(code);
+    wireAuthChrome(ui);
+}
+
+/* ---------- IT SUPPORT HUB PAGE (the six category tiles) ---------- */
+function renderSupportPage(code) {
+    const ui = I18N[code].ui;
+    const categories = I18N[code].categories;
+
+    document.title = `${ui.itSupportTitle}${ui.titleSuffix}`;
+
+    setText("productTag", ui.productTag);
+    setText("backLabel", ui.breadcrumbHome);
+    setText("crumbHome", ui.breadcrumbHome);
+    setText("crumbCurrent", ui.itSupportTitle);
+    setText("pageTitle", ui.itSupportTitle);
+    setText("pageSubtitle", ui.supportPageSubtitle);
 
     const grid = document.getElementById("categoryGrid");
     if (grid) {
@@ -540,12 +628,14 @@ function initHeaderSearch(code) {
     input.oninput = () => {
         const q = normalizeSearch(input.value);
 
-        if (page === "index") {
-            const cards = document.querySelectorAll("#categoryGrid .category-card");
+        if (page === "index" || page === "support") {
+            // Matches both tile styles: .category-card (support.html's six
+            // issue categories) and .launcher-card (index.html's home tiles).
+            const cards = document.querySelectorAll("#categoryGrid .category-card, #categoryGrid .launcher-card");
             let anyVisible = false;
             cards.forEach((card) => {
-                const title = normalizeSearch(card.querySelector(".tile-title")?.textContent || "");
-                const desc = normalizeSearch(card.querySelector(".tile-desc")?.textContent || "");
+                const title = normalizeSearch(card.querySelector(".tile-title, .launcher-title")?.textContent || "");
+                const desc = normalizeSearch(card.querySelector(".tile-desc, .launcher-desc")?.textContent || "");
                 const match = !q || title.includes(q) || desc.includes(q);
                 card.style.display = match ? "" : "none";
                 if (match) anyVisible = true;
@@ -579,10 +669,24 @@ function setSearchEmpty(show, ui) {
 }
 
 /* ---------- Boot / router ---------- */
+// The announcement marquee is shared chrome that sits above the header on
+// every page that uses it — rendered here once instead of duplicating the
+// same two lines inside every page-specific render function.
+function renderMarquee(code) {
+    const ui = I18N[code].ui;
+    document.querySelectorAll(".marquee-text").forEach((el) => {
+        el.textContent = ui.announcementBar;
+    });
+}
+
 function renderCurrentPage(code) {
     const page = document.body.getAttribute("data-page");
+    renderMarquee(code);
     if (page === "index") renderIndexPage(code);
     if (page === "category") renderCategoryPage(code);
+    if (page === "support") renderSupportPage(code);
+    if (page === "apps-support") renderPlaceholderPage(code, "appsSupportTitle", "appsSupportDesc");
+    if (page === "booking") renderPlaceholderPage(code, "bookingTitle", "bookingDesc");
 }
 
 document.addEventListener("DOMContentLoaded", () => {

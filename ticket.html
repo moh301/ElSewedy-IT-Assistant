@@ -286,6 +286,14 @@
             color: var(--text-faint);
         }
 
+        .breadcrumb a {
+            transition: color 0.15s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--red);
+        }
+
         .page-header {
             display: flex;
             align-items: flex-start;
@@ -1146,9 +1154,9 @@
 
         <div class="breadcrumb">
 
-            <span data-i18n="home">
+            <a href="index.html" data-i18n="home">
                 Home
-            </span>
+            </a>
 
             <span class="sep">
                 /
@@ -2288,7 +2296,10 @@
            LANGUAGE
         ========================================================= */
 
-        const STORAGE_KEY = "swe_it_chat_lang";
+        // Shared with the main site (js/main.js) and the chatbot
+        // (chatbot/i18n-chat.js) — same storage key everywhere so a
+        // language change on any page carries over to all the others.
+        const STORAGE_KEY = "swe_it_lang";
 
 
         function getSavedLanguage() {

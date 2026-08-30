@@ -19,7 +19,7 @@
 //             use, so no manual phpMyAdmin step is required.
 // 'sqlite'  — zero setup, stores everything in data/requests.sqlite
 //             instead. Handy for a quick local test with no MySQL at all.
-define('DB_DRIVER', getenv('SWE_DB_DRIVER') ?: 'mysql');
+define('DB_DRIVER', getenv('SWE_DB_DRIVER') ?: 'sqlite');
 
 define('DB_HOST', getenv('SWE_DB_HOST') ?: 'localhost');
 define('DB_NAME', getenv('SWE_DB_NAME') ?: 'swe_it_assist');
