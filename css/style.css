@@ -790,6 +790,31 @@ button {
     height: 25px;
 }
 
+/* Real brand-logo badges (Application Support cards) — neutral card so the
+   brand's own color reads correctly, and each mark keeps its true aspect
+   ratio instead of being squashed into a 25x25 square. */
+.launcher-icon-badge--logo {
+    background: var(--surface);
+    border: 1px solid var(--surface-sunken);
+    color: initial;
+}
+
+.launcher-icon-badge--oracle {
+    width: auto;
+    min-width: 52px;
+    padding: 0 12px;
+}
+
+.launcher-icon-badge--oracle svg {
+    width: auto;
+    height: 16px;
+}
+
+.launcher-icon-badge--salesforce svg {
+    width: 32px;
+    height: auto;
+}
+
 .launcher-title {
     font-size: 16px;
     font-weight: 800;
