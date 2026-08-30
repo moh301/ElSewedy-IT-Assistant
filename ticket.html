@@ -2929,6 +2929,16 @@
             getSavedLanguage()
         );
 
+        /* Re-apply the saved language whenever this page is restored
+           from the browser's back/forward cache (bfcache), so that
+           going "back" here after changing the language elsewhere
+           doesn't show a stale, previously-rendered language. */
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted) {
+                applyLanguage(getSavedLanguage());
+            }
+        });
+
     </script>
 
 </body>

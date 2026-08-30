@@ -32,7 +32,9 @@
             sendMessage: "Send message",
             pinChat: "Pin chat",
             errorNoAI: "I couldn't get a response from the AI. Please try again.",
-            errorConn: "I couldn't connect to the AI right now. Please check that the IT Assist server is running and try again."
+            errorConn: "I couldn't connect to the AI right now. Please check that the IT Assist server is running and try again.",
+            sendTicket: "Send a Ticket",
+            openTickets: "Open a support ticket"
         },
         ar: {
             dir: "rtl",
@@ -61,7 +63,9 @@
             sendMessage: "إرسال الرسالة",
             pinChat: "تثبيت المحادثة",
             errorNoAI: "تعذر الحصول على رد من الذكاء الاصطناعي. حاول مرة أخرى.",
-            errorConn: "تعذر الاتصال بالذكاء الاصطناعي الآن. تأكد من تشغيل خادم IT Assist وحاول مرة أخرى."
+            errorConn: "تعذر الاتصال بالذكاء الاصطناعي الآن. تأكد من تشغيل خادم IT Assist وحاول مرة أخرى.",
+            sendTicket: "إرسال تذكرة",
+            openTickets: "فتح تذكرة دعم فني"
         },
         es: {
             dir: "ltr",
@@ -90,7 +94,9 @@
             sendMessage: "Enviar mensaje",
             pinChat: "Fijar chat",
             errorNoAI: "No se pudo obtener respuesta de la IA. Inténtalo de nuevo.",
-            errorConn: "No se pudo conectar con la IA en este momento. Verifica que el servidor de IT Assist esté en ejecución e inténtalo de nuevo."
+            errorConn: "No se pudo conectar con la IA en este momento. Verifica que el servidor de IT Assist esté en ejecución e inténtalo de nuevo.",
+            sendTicket: "Enviar un ticket",
+            openTickets: "Abrir un ticket de soporte"
         },
         zh: {
             dir: "ltr",
@@ -119,7 +125,9 @@
             sendMessage: "发送消息",
             pinChat: "固定对话",
             errorNoAI: "无法从 AI 获取回复，请重试。",
-            errorConn: "目前无法连接到 AI，请确认 IT Assist 服务器正在运行后重试。"
+            errorConn: "目前无法连接到 AI，请确认 IT Assist 服务器正在运行后重试。",
+            sendTicket: "提交工单",
+            openTickets: "打开支持工单"
         }
     };
 
@@ -210,6 +218,16 @@
     document.addEventListener("DOMContentLoaded", function () {
         wireSwitcher();
         applyLanguage(getSavedLang());
+    });
+
+    /* Re-apply the saved language whenever this page is restored from
+       the browser's back/forward cache (bfcache), so that going "back"
+       here after changing the language elsewhere doesn't show a stale,
+       previously-rendered language. */
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted) {
+            applyLanguage(getSavedLang());
+        }
     });
 
 })();

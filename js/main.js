@@ -694,3 +694,16 @@ document.addEventListener("DOMContentLoaded", () => {
     applyDocumentDirection(code);
     renderCurrentPage(code);
 });
+
+/* Re-apply the saved language whenever this page is restored from the
+   browser's back/forward cache (bfcache). Without this, navigating back
+   to a page (e.g. after changing the language on the ticket or chatbot
+   page) can show a stale, previously-rendered language because the page
+   is restored from cache without re-running the scripts above. */
+window.addEventListener("pageshow", (e) => {
+    if (e.persisted) {
+        const code = detectInitialLang();
+        applyDocumentDirection(code);
+        renderCurrentPage(code);
+    }
+});
