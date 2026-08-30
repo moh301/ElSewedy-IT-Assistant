@@ -1749,6 +1749,9 @@
          SCRIPT
     ========================= -->
 
+    <!-- EmailJS SDK (used by js/ticket.js to send the ticket submission email) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
     <script>
 
         /* =========================================================
@@ -2291,6 +2294,9 @@
 
         };
 
+        // Exposed for js/ticket.js
+        window.TICKET_I18N = TICKET_I18N;
+
 
         /* =========================================================
            LANGUAGE
@@ -2687,6 +2693,15 @@
         }
 
 
+        // Exposed for js/ticket.js to clear attachments after a successful submit
+        window.SWE_resetTicketFileList = function () {
+
+            attachedFiles = [];
+            renderFileList();
+
+        };
+
+
         function renderFileList() {
 
             fileList.innerHTML = "";
@@ -2803,89 +2818,9 @@
             );
 
 
-        ticketForm.addEventListener(
-            "submit",
-            function (event) {
-
-                event.preventDefault();
-
-
-                if (
-                    !ticketForm.checkValidity()
-                ) {
-
-                    ticketForm.reportValidity();
-
-                    return;
-
-                }
-
-
-                submitBtn.disabled =
-                    true;
-
-
-                const language =
-                    window.SWE_TICKET_LANG ||
-                    "en";
-
-                submitBtn
-                    .querySelector(
-                        "span"
-                    )
-                    .textContent =
-                    TICKET_I18N[
-                        language
-                    ].submitting;
-
-
-                /* Simulation */
-
-                setTimeout(
-                    function () {
-
-                        const refNumber =
-                            "TCK-" +
-                            Math.floor(
-                                100000 +
-                                Math.random() *
-                                900000
-                            );
-
-
-                        ticketRef.textContent =
-                            refNumber;
-
-
-                        ticketForm.classList.add(
-                            "hide"
-                        );
-
-
-                        successPanel.classList.add(
-                            "show"
-                        );
-
-
-                        submitBtn.disabled =
-                            false;
-
-
-                        submitBtn
-                            .querySelector(
-                                "span"
-                            )
-                            .textContent =
-                            TICKET_I18N[
-                                language
-                            ].submitRequest;
-
-                    },
-                    700
-                );
-
-            }
-        );
+        /* Actual submission (EmailJS send + payload building) now lives in
+           js/ticket.js, which attaches its own "submit" listener to
+           #ticketForm using the elements declared above. */
 
 
         /* =========================================================
@@ -2929,17 +2864,10 @@
             getSavedLanguage()
         );
 
-        /* Re-apply the saved language whenever this page is restored
-           from the browser's back/forward cache (bfcache), so that
-           going "back" here after changing the language elsewhere
-           doesn't show a stale, previously-rendered language. */
-        window.addEventListener("pageshow", function (event) {
-            if (event.persisted) {
-                applyLanguage(getSavedLanguage());
-            }
-        });
-
     </script>
+
+    <!-- Ticket form submission logic (EmailJS integration) -->
+    <script src="js/ticket.js"></script>
 
 </body>
 
