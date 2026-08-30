@@ -93,10 +93,8 @@ function seed_employees(PDO $pdo): void {
 
     $demoEmployees = [
         ['10234', 'ahmed.hassan@elsewedy.com', 'Ahmed Hassan'],
-        ['10547', 'mohamed.hazam@elsewedy.com', 'Mohamed Hazam'],
-        ['10892', 'sara.ibrahim@elsewedy.com', 'Sara Ibrahim'],
-        ['11023', 'youssif.zaghloul@elsewedy.com', 'Youssif Zaghloul'],
-        ['11150', 'mona.tarek@elsewedy.com', 'Mona Tarek'],
+        ['10547', 'mohamed.hazem@elsewedy.com', 'Mohamed Hazem'],
+        ['11150', 'yossef.mohamed@elsewedy.com', 'Yossef Mohamed'],
     ];
 
     $stmt = $pdo->prepare('INSERT INTO employees (employee_id, email, name) VALUES (?, ?, ?)');
