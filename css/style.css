@@ -790,31 +790,6 @@ button {
     height: 25px;
 }
 
-/* Real brand-logo badges (Application Support cards) — neutral card so the
-   brand's own color reads correctly, and each mark keeps its true aspect
-   ratio instead of being squashed into a 25x25 square. */
-.launcher-icon-badge--logo {
-    background: var(--surface);
-    border: 1px solid var(--surface-sunken);
-    color: initial;
-}
-
-.launcher-icon-badge--oracle {
-    width: auto;
-    min-width: 52px;
-    padding: 0 12px;
-}
-
-.launcher-icon-badge--oracle svg {
-    width: auto;
-    height: 16px;
-}
-
-.launcher-icon-badge--salesforce svg {
-    width: 32px;
-    height: auto;
-}
-
 .launcher-title {
     font-size: 16px;
     font-weight: 800;
@@ -975,6 +950,16 @@ button {
     transform: rotate(360deg);
 }
 
+/* Real brand logos (Oracle/Salesforce) aren't symmetric like the generic
+   outline icons, so spinning them on hover reads as a jarring wobble
+   instead of a clean spin — keep the card lift, drop the rotation. */
+.category-card:hover .tile-icon--oracle,
+.category-card:focus-visible .tile-icon--oracle,
+.category-card:hover .tile-icon--salesforce,
+.category-card:focus-visible .tile-icon--salesforce {
+    transform: none;
+}
+
 .tile-title {
     font-size: 15px;
     font-weight: 800;
@@ -999,6 +984,19 @@ button {
 
 .category-card:hover .tile-reveal,
 .category-card:focus-visible .tile-reveal {
+    max-height: 170px;
+    opacity: 1;
+    margin-top: 16px;
+}
+
+/* Application Support cards (only 2 tiles, side by side in the same grid
+   row): a hover-only reveal made the row's height jump every time the
+   mouse crossed from one card to the other, reading as the whole section
+   shaking. Show the description/button permanently instead so nothing in
+   the grid changes height on hover. */
+.tile-reveal--static,
+.category-card:hover .tile-reveal--static,
+.category-card:focus-visible .tile-reveal--static {
     max-height: 170px;
     opacity: 1;
     margin-top: 16px;

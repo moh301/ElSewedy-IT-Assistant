@@ -292,8 +292,8 @@ function renderIndexPage(code) {
 // issues. Add more apps by adding entries here plus a title/desc pair
 // in i18n.js.
 const APPS_SUPPORT_APPS = [
-    { iconKey: "oracleLogo", badgeClass: "launcher-icon-badge--oracle", titleKey: "oracleErpTitle", descKey: "oracleErpDesc", href: "https://www.oracle.com/cloud/sign-in.html", external: true },
-    { iconKey: "salesforceLogo", badgeClass: "launcher-icon-badge--salesforce", titleKey: "salesforceCrmTitle", descKey: "salesforceCrmDesc", href: "https://login.salesforce.com/", external: true }
+    { iconKey: "oracleLogo", badgeClass: "tile-icon--oracle", titleKey: "oracleErpTitle", descKey: "oracleErpDesc", href: "https://www.oracle.com/cloud/sign-in.html", external: true },
+    { iconKey: "salesforceLogo", badgeClass: "tile-icon--salesforce", titleKey: "salesforceCrmTitle", descKey: "salesforceCrmDesc", href: "https://login.salesforce.com/", external: true }
 ];
 
 function renderAppsSupportPage(code) {
@@ -313,15 +313,17 @@ function renderAppsSupportPage(code) {
         grid.innerHTML = "";
         APPS_SUPPORT_APPS.forEach((item, i) => {
             const card = document.createElement("div");
-            card.className = "launcher-card fade-up";
+            card.className = "category-card app-tile-card";
             card.setAttribute("tabindex", "0");
             card.setAttribute("role", "button");
-            card.style.animationDelay = `${Math.min(i * 0.06, 0.3)}s`;
+            card.style.animationDelay = `${Math.min(i * 0.05, 0.35)}s`;
             card.innerHTML = `
-                <div class="launcher-icon-badge launcher-icon-badge--logo ${item.badgeClass || ""}">${icon(item.iconKey)}</div>
-                <div class="launcher-title">${escapeHTML(ui[item.titleKey])}</div>
-                <p class="launcher-desc">${escapeHTML(ui[item.descKey])}</p>
-                <span class="launcher-arrow"><span>${escapeHTML(ui.openApp)}</span>${icon("arrowRight")}</span>
+                <div class="tile-icon tile-icon--logo ${item.badgeClass || ""}">${icon(item.iconKey)}</div>
+                <div class="tile-title">${escapeHTML(ui[item.titleKey])}</div>
+                <div class="tile-reveal tile-reveal--static">
+                    <p class="tile-desc">${escapeHTML(ui[item.descKey])}</p>
+                    <span class="tile-btn"><span>${escapeHTML(ui.openApp)}</span>${icon("arrowRight")}</span>
+                </div>
             `;
             const go = () => {
                 if (item.external) {
