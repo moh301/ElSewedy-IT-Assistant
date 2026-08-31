@@ -840,7 +840,7 @@ async function sendMessage(
 
         const response =
             await fetch(
-                "http://127.0.0.1:8000/chat",
+                "https://chatbot-backend-us17.onrender.com/chat",
                 {
 
                     method:
