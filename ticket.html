@@ -648,7 +648,7 @@
             color: var(--text-faint);
         }
 
-        #fileInput {
+        #ticket-attachment {
             display: none;
         }
 
@@ -700,6 +700,49 @@
             line-height: 1;
 
             padding: 2px 4px;
+        }
+
+        /* Subtle "Uploading file..." status shown under the drop-zone while
+           an attached image is being uploaded to ImgBB (see js/ticket.js).
+           Hidden by default; toggled via the .show class. Styled to match
+           the existing .file-drop-text .sub treatment so it doesn't stand
+           out as a new UI element. */
+        .file-upload-status {
+            display: none;
+
+            align-items: center;
+
+            gap: 6px;
+
+            font-size: 12px;
+
+            color: var(--text-faint);
+
+            margin-top: 2px;
+        }
+
+        .file-upload-status.show {
+            display: flex;
+        }
+
+        .file-upload-status .spinner {
+            width: 11px;
+            height: 11px;
+
+            border: 1.5px solid var(--border);
+            border-top-color: var(--red);
+
+            border-radius: 50%;
+
+            animation: swe-upload-spin 0.7s linear infinite;
+
+            flex-shrink: 0;
+        }
+
+        @keyframes swe-upload-spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* =========================
@@ -1266,6 +1309,31 @@
                 novalidate
             >
 
+                <!-- Hidden fields for EmailJS sendForm() — not part of the
+                     visible UI. Populated dynamically in js/ticket.js right
+                     before submit with the signed-in user's name/email,
+                     support recipient, and a generated ticket reference, so
+                     the EmailJS template's {{name}} / {{email}} / {{title}} /
+                     {{message}} / {{to_email}} / {{ticket_ref}} variables are
+                     always filled correctly regardless of the visible field
+                     names below. -->
+                <input type="hidden" id="hiddenSenderName" name="name">
+                <input type="hidden" id="hiddenSenderEmail" name="email">
+                <input type="hidden" id="hiddenReplyTo" name="reply_to">
+                <input type="hidden" id="hiddenTitle" name="title">
+                <input type="hidden" id="hiddenMessage" name="message">
+                <input type="hidden" id="hiddenToEmail" name="to_email">
+                <input type="hidden" id="hiddenTicketRef" name="ticket_ref">
+
+                <!-- Populated by js/ticket.js once any image attachment has
+                     finished uploading to ImgBB (see the FILE UPLOAD script
+                     block below + js/ticket.js). Holds the viewable
+                     image URL(s) so the EmailJS template can render a real
+                     clickable link — {{file_url}} — in the email body,
+                     since the EmailJS free plan doesn't deliver binary
+                     attachments reliably. -->
+                <input type="hidden" id="hiddenFileUrl" name="file_url">
+
                 <!-- Intro -->
 
                 <div class="card-intro">
@@ -1561,7 +1629,7 @@
 
                     <div class="field full">
 
-                        <label for="fileInput">
+                        <label for="ticket-attachment">
 
                             <span data-i18n="fileAttachment">
                                 File Attachment
@@ -1607,7 +1675,7 @@
                                     class="sub"
                                     data-i18n="uploadSub"
                                 >
-                                    Screenshots, logs, or documents — up to 10MB
+                                    Screenshots, logs, or documents — up to 20MB
                                 </span>
 
                             </div>
@@ -1617,7 +1685,8 @@
 
                         <input
                             type="file"
-                            id="fileInput"
+                            id="ticket-attachment"
+                            name="attachment"
                             multiple
                         >
 
@@ -1625,6 +1694,17 @@
                             class="file-list"
                             id="fileList"
                         ></div>
+
+                        <!-- Subtle loading indicator while an attached image
+                             is uploaded to ImgBB in the background (see
+                             js/ticket.js). Empty/hidden until then. -->
+                        <div
+                            class="file-upload-status"
+                            id="fileUploadStatus"
+                        >
+                            <span class="spinner"></span>
+                            <span id="fileUploadStatusText"></span>
+                        </div>
 
                     </div>
 
@@ -1860,7 +1940,10 @@
                     "Click to upload or drag a file here",
 
                 uploadSub:
-                    "Screenshots, logs, or documents — up to 10MB",
+                    "Screenshots, logs, or documents — up to 20MB",
+
+                uploadingFile:
+                    "Uploading file...",
 
                 requiredNote:
                     "Fields marked with * are required",
@@ -1996,7 +2079,10 @@
                     "اضغط لرفع ملف أو اسحب الملف هنا",
 
                 uploadSub:
-                    "صور شاشة أو سجلات أو مستندات — حتى 10 ميجابايت",
+                    "صور شاشة أو سجلات أو مستندات — حتى 20 ميجابايت",
+
+                uploadingFile:
+                    "جاري رفع الملف...",
 
                 requiredNote:
                     "الحقول التي تحتوي على * مطلوبة",
@@ -2132,7 +2218,10 @@
                     "Haz clic para subir un archivo o arrástralo aquí",
 
                 uploadSub:
-                    "Capturas de pantalla, registros o documentos — hasta 10 MB",
+                    "Capturas de pantalla, registros o documentos — hasta 20 MB",
+
+                uploadingFile:
+                    "Subiendo archivo...",
 
                 requiredNote:
                     "Los campos marcados con * son obligatorios",
@@ -2268,7 +2357,10 @@
                     "点击上传文件或将文件拖到这里",
 
                 uploadSub:
-                    "屏幕截图、日志或文档 — 最大 10MB",
+                    "屏幕截图、日志或文档 — 最大 20MB",
+
+                uploadingFile:
+                    "正在上传文件...",
 
                 requiredNote:
                     "带有 * 的字段为必填项",
@@ -2595,7 +2687,7 @@
 
         const fileInput =
             document.getElementById(
-                "fileInput"
+                "ticket-attachment"
             );
 
         const fileList =
@@ -2605,6 +2697,32 @@
 
 
         let attachedFiles = [];
+
+        // Max size per attached file — matches the "up to 20MB" label
+        // above. Kept as a single constant so it's easy to change later.
+        // (Note: EmailJS's own guidance is to stay at/under ~10MB per
+        // attachment for reliable delivery across mail providers — see the
+        // note in js/ticket.js — so treat 20MB as an upper ceiling, not a
+        // guarantee every provider will accept it.)
+        const MAX_ATTACHMENT_SIZE_MB = 20;
+        const MAX_ATTACHMENT_SIZE_BYTES = MAX_ATTACHMENT_SIZE_MB * 1024 * 1024;
+
+        // Keeps the real <input type="file" id="ticket-attachment"> in sync
+        // with attachedFiles, so EmailJS's sendForm() always reflects
+        // whatever is currently shown in the file-chip list — whether
+        // added via the native picker, drag-and-drop, or removed via the
+        // "✕" button.
+        function syncFileInputWithAttachedFiles() {
+            try {
+                const dataTransfer = new DataTransfer();
+                attachedFiles.forEach(function (f) {
+                    dataTransfer.items.add(f);
+                });
+                fileInput.files = dataTransfer.files;
+            } catch (err) {
+                console.warn("SWE Ticket: could not sync attachments to the file input", err);
+            }
+        }
 
 
         fileDrop.addEventListener(
@@ -2681,15 +2799,49 @@
 
         function handleFiles(fileArray) {
 
+            const oversized = [];
+
             Array
                 .from(fileArray)
                 .forEach(function (file) {
+
+                    if (file.size > MAX_ATTACHMENT_SIZE_BYTES) {
+                        oversized.push(file);
+                        return;
+                    }
 
                     attachedFiles.push(file);
 
                 });
 
+            if (oversized.length > 0) {
+
+                const names = oversized.map(function (f) {
+                    return f.name + " (" + (f.size / (1024 * 1024)).toFixed(1) + " MB)";
+                }).join("\n");
+
+                alert(
+                    "The following file(s) exceed the " + MAX_ATTACHMENT_SIZE_MB + "MB limit and were not attached:\n\n" +
+                    names
+                );
+
+            }
+
+            // Covers the drag-and-drop case, where the browser never
+            // actually populates the native input's .files itself. This is
+            // what lets EmailJS's sendForm() pick up dropped files via the
+            // form's real FormData, not just ones chosen through the
+            // native file picker.
+            syncFileInputWithAttachedFiles();
+
             renderFileList();
+
+            // Kicks off the ImgBB upload flow (defined in js/ticket.js) for
+            // any newly-added image file(s), so a viewable link is ready
+            // as {{file_url}} by the time the form is submitted.
+            if (typeof window.SWE_processTicketAttachments === "function") {
+                window.SWE_processTicketAttachments(attachedFiles);
+            }
         }
 
 
@@ -2697,7 +2849,20 @@
         window.SWE_resetTicketFileList = function () {
 
             attachedFiles = [];
+            syncFileInputWithAttachedFiles();
             renderFileList();
+
+            if (typeof window.SWE_processTicketAttachments === "function") {
+                window.SWE_processTicketAttachments(attachedFiles);
+            }
+
+        };
+
+        // Exposed for js/ticket.js to read the currently attached files
+        // (kept in sync with the drop-zone / #ticket-attachment input above)
+        window.SWE_getTicketAttachments = function () {
+
+            return attachedFiles;
 
         };
 
@@ -2769,7 +2934,13 @@
                                 1
                             );
 
+                            syncFileInputWithAttachedFiles();
+
                             renderFileList();
+
+                            if (typeof window.SWE_processTicketAttachments === "function") {
+                                window.SWE_processTicketAttachments(attachedFiles);
+                            }
 
                         }
                     );
@@ -2842,7 +3013,13 @@
 
                 attachedFiles = [];
 
+                syncFileInputWithAttachedFiles();
+
                 renderFileList();
+
+                if (typeof window.SWE_processTicketAttachments === "function") {
+                    window.SWE_processTicketAttachments(attachedFiles);
+                }
 
                 ticketForm.classList.remove(
                     "hide"
