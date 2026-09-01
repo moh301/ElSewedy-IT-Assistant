@@ -223,7 +223,7 @@
                 if (authUser) return authUser;
             } else {
                 const authKey = window.SWE_AUTH_STORAGE_KEY || "swe_it_auth";
-                const raw = sessionStorage.getItem(authKey);
+                const raw = localStorage.getItem(authKey);
                 if (raw) return JSON.parse(raw);
             }
         } catch (err) {

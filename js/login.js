@@ -18,7 +18,7 @@
     // Already signed in? Skip straight past the login form.
     (function redirectIfAlreadySignedIn() {
         try {
-            var raw = sessionStorage.getItem(AUTH_STORAGE_KEY);
+            var raw = localStorage.getItem(AUTH_STORAGE_KEY);
             if (raw && JSON.parse(raw).employeeId) {
                 window.location.replace(safeRedirectTarget());
             }
@@ -93,7 +93,7 @@
                     return;
                 }
 
-                sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(data.user));
+                localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(data.user));
                 window.location.href = safeRedirectTarget();
             } catch (err) {
                 console.error("Login failed:", err);

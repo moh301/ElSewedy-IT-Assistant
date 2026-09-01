@@ -25,7 +25,7 @@
 
     function getAuthUser() {
         try {
-            var raw = sessionStorage.getItem(AUTH_STORAGE_KEY);
+            var raw = localStorage.getItem(AUTH_STORAGE_KEY);
             if (!raw) return null;
             var user = JSON.parse(raw);
             if (!user || !user.employeeId || !user.email) return null;
@@ -53,7 +53,7 @@
     }
 
     function logout() {
-        try { sessionStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) { /* ignore */ }
+        try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) { /* ignore */ }
         // Best-effort — the site has nothing server-side to actually tear
         // down (no PHP session), this just mirrors the login call for
         // symmetry. Failing silently is fine either way.
