@@ -138,6 +138,50 @@ input {
 }
 
 
+/* Close (X) button inside the sidebar itself, for mobile — the toggle
+   button that opens the sidebar sits in the main header behind it once
+   it's open, so there was no way to close it back again on a phone.
+   Hidden on desktop, where the sidebar is part of the normal layout. */
+.sidebar-close {
+
+    display: none;
+
+    width: 32px;
+    height: 32px;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-inline-start: auto;
+    flex-shrink: 0;
+
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: #C9D2E0;
+
+    cursor: pointer;
+
+    transition: background 0.15s ease;
+}
+
+.sidebar-close:hover {
+
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-close svg {
+
+    width: 18px;
+    height: 18px;
+}
+
+.sidebar-backdrop {
+
+    display: none;
+}
+
+
 /* =========================================================
    BRAND
 ========================================================= */
@@ -1192,6 +1236,37 @@ input {
     .sidebar.is-collapsed {
 
         margin-left: 0;
+    }
+
+
+    .sidebar-close {
+
+        display: flex;
+    }
+
+
+    .sidebar-backdrop {
+
+        display: block;
+
+        position: fixed;
+        inset: 0;
+
+        z-index: 45;
+
+        background: rgba(15, 23, 42, 0.45);
+
+        opacity: 0;
+        pointer-events: none;
+
+        transition: opacity 0.2s ease;
+    }
+
+
+    .sidebar-backdrop.is-visible {
+
+        opacity: 1;
+        pointer-events: auto;
     }
 
 

@@ -13,204 +13,17 @@ const sidebar =
 const sidebarToggle =
     document.getElementById("sidebar-toggle");
 
+const sidebarClose =
+    document.getElementById("sidebar-close");
+
+const sidebarBackdrop =
+    document.getElementById("sidebar-backdrop");
+
 const backButton =
     document.getElementById("back-button");
 
 const newChatButton =
     document.getElementById("new-chat-btn");
-
-const recentHistoryList =
-    document.getElementById("recent-history");
-
-
-/* =========================================================
-   WELCOME MESSAGE
-========================================================= */
-
-function getWelcomeHTML() {
-
-    const lang =
-        window.SWE_CHAT_LANG || "en";
-
-    const t =
-        (
-            window.CHAT_I18N &&
-            window.CHAT_I18N[lang]
-        ) || {};
-
-    return `
-        <div class="message bot-message">
-
-            <div class="bot-heading">
-
-                ${escapeHtml(
-                    t.welcomeHeading ||
-                    "Welcome to SWE IT Assist"
-                )}
-
-            </div>
-
-            ${escapeHtml(
-                t.welcomeBody ||
-                "Hello! How can I help you today?"
-            )}
-
-        </div>
-    `;
-}
-
-
-const WELCOME_HTML =
-    getWelcomeHTML();
-
-
-/* =========================================================
-   CHAT HISTORY STATE
-========================================================= */
-
-const STORAGE_KEY =
-    "swe_it_assist_sessions";
-
-
-let sessions = [];
-
-let currentSessionId = null;
-
-
-/* =========================================================
-   LOAD SESSIONS
-========================================================= */
-
-function loadSessionsFromStorage() {
-
-    try {
-
-        const raw =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
-
-        const parsed =
-            raw
-                ? JSON.parse(raw)
-                : [];
-
-        sessions =
-            Array.isArray(parsed)
-                ? parsed
-                : [];
-
-    } catch (error) {
-
-        console.error(
-            "Failed to load chat history:",
-            error
-        );
-
-        sessions = [];
-
-    }
-}
-
-
-/* =========================================================
-   SAVE SESSIONS
-========================================================= */
-
-function saveSessionsToStorage() {
-
-    try {
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(sessions)
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Failed to save chat history:",
-            error
-        );
-
-    }
-}
-
-
-/* =========================================================
-   GET SESSION
-========================================================= */
-
-function getSessionById(id) {
-
-    return sessions.find(
-        session =>
-            session.id === id
-    );
-
-}
-
-
-/* =========================================================
-   GENERATE SESSION ID
-========================================================= */
-
-function generateSessionId() {
-
-    if (
-        window.crypto &&
-        typeof window.crypto.randomUUID ===
-            "function"
-    ) {
-
-        return window.crypto.randomUUID();
-
-    }
-
-
-    return (
-        "session-" +
-        Date.now() +
-        "-" +
-        Math.random()
-            .toString(16)
-            .slice(2)
-    );
-
-}
-
-
-/* =========================================================
-   GENERATE TITLE
-========================================================= */
-
-function generateTitle(text) {
-
-    const clean =
-        text
-            .trim()
-            .replace(/\s+/g, " ");
-
-    const MAX_LEN = 34;
-
-
-    if (
-        clean.length <= MAX_LEN
-    ) {
-
-        return clean;
-
-    }
-
-
-    return (
-        clean
-            .slice(0, MAX_LEN)
-            .trim() +
-        "…"
-    );
-
-}
 
 
 /* =========================================================
@@ -221,7 +34,6 @@ function scrollToBottom() {
 
     chatBox.scrollTop =
         chatBox.scrollHeight;
-
 }
 
 
@@ -232,69 +44,82 @@ function scrollToBottom() {
 function formatBotMessage(text) {
 
     if (!text) {
-
         return "";
-
     }
 
 
-    let html =
-        text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;");
+    /*
+       Escape HTML first
+       to prevent Gemini text
+       from injecting HTML.
+    */
+
+    let html = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
 
-    /* Bold */
+    /*
+       Bold
+       **text**
+    */
 
-    html =
-        html.replace(
-            /\*\*(.*?)\*\*/g,
-            "<strong>$1</strong>"
-        );
-
-
-    /* Headings */
-
-    html =
-        html.replace(
-            /^###\s*(.+)$/gm,
-            '<div class="bot-heading">$1</div>'
-        );
+    html = html.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
 
 
-    html =
-        html.replace(
-            /^##\s*(.+)$/gm,
-            '<div class="bot-heading bot-heading-large">$1</div>'
-        );
+    /*
+       Headings
+       ### Heading
+    */
+
+    html = html.replace(
+        /^###\s*(.+)$/gm,
+        '<div class="bot-heading">$1</div>'
+    );
 
 
-    /* Numbered list */
-
-    html =
-        html.replace(
-            /^\s*(\d+)\.\s+(.+)$/gm,
-            '<div class="bot-list-item">' +
-            '<span class="list-number">$1.</span>' +
-            '<span>$2</span>' +
-            '</div>'
-        );
+    html = html.replace(
+        /^##\s*(.+)$/gm,
+        '<div class="bot-heading bot-heading-large">$1</div>'
+    );
 
 
-    /* Bullet list */
+    /*
+       Numbered list
+       1. Something
+    */
 
-    html =
-        html.replace(
-            /^\s*[-*]\s+(.+)$/gm,
-            '<div class="bot-list-item">' +
-            '<span class="list-bullet">•</span>' +
-            '<span>$1</span>' +
-            '</div>'
-        );
+    html = html.replace(
+        /^\s*(\d+)\.\s+(.+)$/gm,
+        '<div class="bot-list-item">' +
+        '<span class="list-number">$1.</span>' +
+        '<span>$2</span>' +
+        '</div>'
+    );
 
 
-    /* New lines */
+    /*
+       Bullet list
+       - Something
+       * Something
+    */
+
+    html = html.replace(
+        /^\s*[-*]\s+(.+)$/gm,
+        '<div class="bot-list-item">' +
+        '<span class="list-bullet">•</span>' +
+        '<span>$1</span>' +
+        '</div>'
+    );
+
+
+    /*
+       New lines
+    */
 
     html =
         html.replace(
@@ -304,7 +129,6 @@ function formatBotMessage(text) {
 
 
     return html;
-
 }
 
 
@@ -326,14 +150,17 @@ function addMessage(
     );
 
 
-    if (
-        sender === "user"
-    ) {
+    if (sender === "user") {
 
         messageDiv.classList.add(
             "user-message"
         );
 
+
+        /*
+           User message
+           stays plain text
+        */
 
         messageDiv.textContent =
             message;
@@ -345,10 +172,13 @@ function addMessage(
         );
 
 
+        /*
+           Gemini response
+           gets formatted
+        */
+
         messageDiv.innerHTML =
-            formatBotMessage(
-                message
-            );
+            formatBotMessage(message);
 
     }
 
@@ -359,7 +189,6 @@ function addMessage(
 
 
     scrollToBottom();
-
 }
 
 
@@ -387,26 +216,13 @@ function showThinking() {
     );
 
 
-    const lang =
-        window.SWE_CHAT_LANG || "en";
-
-
-    const t =
-        (
-            window.CHAT_I18N &&
-            window.CHAT_I18N[lang]
-        ) || {};
-
+    var _lang = window.SWE_CHAT_LANG || "en";
+    var _t = (window.CHAT_I18N && window.CHAT_I18N[_lang]) || {};
 
     thinkingDiv.innerHTML = `
 
         <span>
-
-            ${escapeHtml(
-                t.thinking ||
-                "Thinking"
-            )}
-
+            ${_t.thinking || "Thinking"}
         </span>
 
         <div class="thinking-dots">
@@ -426,7 +242,6 @@ function showThinking() {
 
 
     scrollToBottom();
-
 }
 
 
@@ -447,349 +262,6 @@ function removeThinking() {
         thinking.remove();
 
     }
-
-}
-
-
-/* =========================================================
-   RENDER RECENT SIDEBAR
-========================================================= */
-
-function renderRecentList() {
-
-    recentHistoryList.innerHTML =
-        "";
-
-
-    if (
-        !sessions ||
-        sessions.length === 0
-    ) {
-
-        const emptyItem =
-            document.createElement("li");
-
-
-        emptyItem.className =
-            "history-empty";
-
-
-        emptyItem.id =
-            "recent-empty";
-
-
-        const lang =
-            window.SWE_CHAT_LANG ||
-            "en";
-
-
-        const t =
-            (
-                window.CHAT_I18N &&
-                window.CHAT_I18N[lang]
-            ) || {};
-
-
-        emptyItem.textContent =
-            t.recentEmpty ||
-            "No recent chats yet";
-
-
-        recentHistoryList.appendChild(
-            emptyItem
-        );
-
-
-        return;
-
-    }
-
-
-    sessions.forEach(
-        session => {
-
-            const item =
-                document.createElement("li");
-
-
-            item.className =
-                "history-item";
-
-
-            item.dataset.sessionId =
-                session.id;
-
-
-            if (
-                session.id ===
-                currentSessionId
-            ) {
-
-                item.classList.add(
-                    "is-active"
-                );
-
-            }
-
-
-            item.innerHTML = `
-
-                <svg
-                    class="history-icon"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-
-                    <path
-                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                    ></path>
-
-                </svg>
-
-
-                <span class="history-title">
-
-                    ${escapeHtml(
-                        session.title
-                    )}
-
-                </span>
-
-            `;
-
-
-            item.addEventListener(
-                "click",
-                function () {
-
-                    switchToSession(
-                        session.id
-                    );
-
-                }
-            );
-
-
-            recentHistoryList.appendChild(
-                item
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(text) {
-
-    return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-
-}
-
-
-/* =========================================================
-   SWITCH SESSION
-========================================================= */
-
-function switchToSession(
-    sessionId
-) {
-
-    const session =
-        getSessionById(
-            sessionId
-        );
-
-
-    if (!session) {
-
-        return;
-
-    }
-
-
-    currentSessionId =
-        session.id;
-
-
-    chatBox.innerHTML =
-        "";
-
-
-    session.messages.forEach(
-        msg => {
-
-            addMessage(
-                msg.text,
-                msg.role
-            );
-
-        }
-    );
-
-
-    document
-        .querySelectorAll(
-            ".pinned-chat"
-        )
-        .forEach(
-            item => {
-
-                item.classList.remove(
-                    "is-active"
-                );
-
-            }
-        );
-
-
-    renderRecentList();
-
-}
-
-
-/* =========================================================
-   CREATE NEW SESSION
-========================================================= */
-
-function createNewSession(
-    firstMessageText
-) {
-
-    const newSession = {
-
-        id:
-            generateSessionId(),
-
-        title:
-            generateTitle(
-                firstMessageText
-            ),
-
-        timestamp:
-            Date.now(),
-
-        messages: []
-
-    };
-
-
-    sessions = [
-        newSession,
-        ...sessions
-    ];
-
-
-    currentSessionId =
-        newSession.id;
-
-
-    saveSessionsToStorage();
-
-
-    renderRecentList();
-
-
-    return newSession;
-
-}
-
-
-/* =========================================================
-   ENSURE ACTIVE SESSION
-========================================================= */
-
-function ensureActiveSession(
-    firstMessageText
-) {
-
-    if (
-        currentSessionId
-    ) {
-
-        const existing =
-            getSessionById(
-                currentSessionId
-            );
-
-
-        if (existing) {
-
-            return existing;
-
-        }
-
-
-        currentSessionId =
-            null;
-
-    }
-
-
-    return createNewSession(
-        firstMessageText
-    );
-
-}
-
-
-/* =========================================================
-   PERSIST MESSAGE
-========================================================= */
-
-function persistMessage(
-    role,
-    text
-) {
-
-    try {
-
-        const session =
-            ensureActiveSession(
-                text
-            );
-
-
-        if (!session) {
-
-            return;
-
-        }
-
-
-        session.messages.push({
-
-            role,
-            text,
-            timestamp:
-                Date.now()
-
-        });
-
-
-        saveSessionsToStorage();
-
-
-        renderRecentList();
-
-    } catch (error) {
-
-        console.error(
-            "Failed to persist chat message:",
-            error
-        );
-
-    }
-
 }
 
 
@@ -801,11 +273,23 @@ async function sendMessage(
     customMessage = null
 ) {
 
+
+    /*
+       If customMessage exists,
+       use it.
+
+       Otherwise use input.
+    */
+
     const message =
         customMessage !== null
             ? customMessage
             : input.value.trim();
 
+
+    /*
+       Don't send empty message.
+    */
 
     if (!message) {
 
@@ -814,37 +298,50 @@ async function sendMessage(
     }
 
 
+    /*
+       Add user message.
+    */
+
     addMessage(
         message,
         "user"
     );
 
 
-    persistMessage(
-        "user",
-        message
-    );
-
+    /*
+       Clear input.
+    */
 
     input.value = "";
 
 
+    /*
+       Show thinking.
+    */
+
     showThinking();
 
 
-    sendButton.disabled =
-        true;
+    /*
+       Disable send button.
+    */
+
+    sendButton.disabled = true;
 
 
     try {
+
+
+        /* =================================================
+           FASTAPI
+        ================================================= */
 
         const response =
             await fetch(
                 "http://127.0.0.1:8000/chat",
                 {
 
-                    method:
-                        "POST",
+                    method: "POST",
 
                     headers: {
 
@@ -865,6 +362,10 @@ async function sendMessage(
             );
 
 
+        /*
+           Check HTTP status.
+        */
+
         if (!response.ok) {
 
             throw new Error(
@@ -874,12 +375,27 @@ async function sendMessage(
         }
 
 
+        /*
+           Convert to JSON.
+        */
+
         const data =
             await response.json();
 
 
+        /*
+           Remove thinking.
+        */
+
         removeThinking();
 
+
+        /*
+           Gemini response.
+        */
+
+        var lang = window.SWE_CHAT_LANG || "en";
+        var t = (window.CHAT_I18N && window.CHAT_I18N[lang]) || {};
 
         if (
             data &&
@@ -891,40 +407,11 @@ async function sendMessage(
                 "bot"
             );
 
-
-            persistMessage(
-                "bot",
-                data.response
-            );
-
         } else {
 
-            const lang =
-                window.SWE_CHAT_LANG ||
-                "en";
-
-
-            const t =
-                (
-                    window.CHAT_I18N &&
-                    window.CHAT_I18N[lang]
-                ) || {};
-
-
-            const fallback =
-                t.errorNoAI ||
-                "I couldn't get a response from the AI. Please try again.";
-
-
             addMessage(
-                fallback,
+                t.errorNoAI || "I couldn't get a response from the AI. Please try again.",
                 "bot"
-            );
-
-
-            persistMessage(
-                "bot",
-                fallback
             );
 
         }
@@ -932,49 +419,47 @@ async function sendMessage(
 
     } catch (error) {
 
+
         console.error(
             "Chat error:",
             error
         );
 
 
+        /*
+           Remove thinking.
+        */
+
         removeThinking();
 
 
-        const lang =
-            window.SWE_CHAT_LANG ||
-            "en";
+        /*
+           Friendly error.
+        */
 
-
-        const t =
-            (
-                window.CHAT_I18N &&
-                window.CHAT_I18N[lang]
-            ) || {};
-
-
-        const errorMessage =
-            t.errorConn ||
-            "I couldn't connect to the AI right now. Please check that the IT Assist server is running and try again.";
-
+        var lang2 = window.SWE_CHAT_LANG || "en";
+        var t2 = (window.CHAT_I18N && window.CHAT_I18N[lang2]) || {};
 
         addMessage(
-            errorMessage,
+            t2.errorConn || "I couldn't connect to the AI right now. Please check that the IT Assist server is running and try again.",
             "bot"
-        );
-
-
-        persistMessage(
-            "bot",
-            errorMessage
         );
 
 
     } finally {
 
+
+        /*
+           Enable button.
+        */
+
         sendButton.disabled =
             false;
 
+
+        /*
+           Focus input.
+        */
 
         input.focus();
 
@@ -1031,8 +516,46 @@ sidebarToggle.addEventListener(
             "is-collapsed"
         );
 
+        if (sidebarBackdrop) {
+            sidebarBackdrop.classList.toggle(
+                "is-visible",
+                sidebar.classList.contains("is-collapsed")
+            );
+        }
+
     }
 );
+
+/* Close (X) button inside the sidebar — mobile only. The header's
+   toggle button gets covered by the sidebar once it's open, so this
+   gives mobile users a reachable way to close it again. */
+if (sidebarClose) {
+    sidebarClose.addEventListener(
+        "click",
+        function () {
+
+            sidebar.classList.remove("is-collapsed");
+
+            if (sidebarBackdrop) {
+                sidebarBackdrop.classList.remove("is-visible");
+            }
+
+        }
+    );
+}
+
+/* Tapping outside the open sidebar (the dimmed backdrop) closes it too. */
+if (sidebarBackdrop) {
+    sidebarBackdrop.addEventListener(
+        "click",
+        function () {
+
+            sidebar.classList.remove("is-collapsed");
+            sidebarBackdrop.classList.remove("is-visible");
+
+        }
+    );
+}
 
 
 /* =========================================================
@@ -1057,17 +580,36 @@ newChatButton.addEventListener(
     "click",
     function () {
 
-        currentSessionId =
-            null;
+
+        /*
+           Clear chat.
+        */
+
+        var lang = window.SWE_CHAT_LANG || "en";
+        var t = (window.CHAT_I18N && window.CHAT_I18N[lang]) || {};
+
+        chatBox.innerHTML = `
+
+            <div class="message bot-message">
+
+                <div class="bot-heading">
+                    ${t.welcomeHeading || "Welcome to SWE IT Assist"}
+                </div>
+
+                ${t.welcomeBody || "Hello! How can I help you today?"}
+
+            </div>
+
+        `;
 
 
-        chatBox.innerHTML =
-            getWelcomeHTML();
-
+        /*
+           Remove active states.
+        */
 
         document
             .querySelectorAll(
-                ".pinned-chat"
+                ".history-item"
             )
             .forEach(
                 item => {
@@ -1080,8 +622,9 @@ newChatButton.addEventListener(
             );
 
 
-        renderRecentList();
-
+        /*
+           Focus input.
+        */
 
         input.focus();
 
@@ -1104,11 +647,21 @@ document
                 "click",
                 function () {
 
+
+                    /*
+                       Get predefined message.
+                    */
+
                     const message =
                         this.getAttribute(
                             "data-message"
                         );
 
+
+                    /*
+                       Remove active
+                       from other pinned items.
+                    */
 
                     document
                         .querySelectorAll(
@@ -1125,18 +678,18 @@ document
                         );
 
 
+                    /*
+                       Activate selected item.
+                    */
+
                     this.classList.add(
                         "is-active"
                     );
 
 
-                    currentSessionId =
-                        null;
-
-
-                    chatBox.innerHTML =
-                        getWelcomeHTML();
-
+                    /*
+                       Send message.
+                    */
 
                     sendMessage(
                         message
@@ -1150,25 +703,112 @@ document
 
 
 /* =========================================================
-   LANGUAGE CHANGE EVENT
+   RECENT CHAT ITEMS
 ========================================================= */
 
-window.addEventListener(
-    "languageChanged",
-    function () {
+document
+    .querySelectorAll(
+        "#recent-history .history-item"
+    )
+    .forEach(
+        item => {
 
-        renderRecentList();
+            item.addEventListener(
+                "click",
+                function () {
 
-    }
-);
+
+                    /*
+                       Don't activate
+                       when clicking pin.
+                    */
+
+                    document
+                        .querySelectorAll(
+                            "#recent-history .history-item"
+                        )
+                        .forEach(
+                            i => {
+
+                                i.classList.remove(
+                                    "is-active"
+                                );
+
+                            }
+                        );
+
+
+                    this.classList.add(
+                        "is-active"
+                    );
+
+                }
+            );
+
+        }
+    );
 
 
 /* =========================================================
-   INIT
+   PIN BUTTONS
 ========================================================= */
 
-loadSessionsFromStorage();
+document
+    .querySelectorAll(
+        ".pin-btn"
+    )
+    .forEach(
+        button => {
 
-renderRecentList();
+            button.addEventListener(
+                "click",
+                function (event) {
+
+
+                    /*
+                       Prevent history item
+                       from being selected.
+                    */
+
+                    event.stopPropagation();
+
+
+                    /*
+                       Toggle pin.
+                    */
+
+                    this.classList.toggle(
+                        "is-active"
+                    );
+
+
+                    /*
+                       Toggle pinned state.
+                    */
+
+                    const item =
+                        this.closest(
+                            ".history-item"
+                        );
+
+
+                    if (item) {
+
+                        item.classList.toggle(
+                            "is-pinned"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   INITIAL FOCUS
+========================================================= */
 
 input.focus();
