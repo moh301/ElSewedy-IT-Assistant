@@ -1212,10 +1212,57 @@ input {
 
         padding:
             14px 16px;
+
+        gap: 8px;
     }
 
 
     .brand-product {
+
+        display: none;
+    }
+
+    /* The title block was the only shrinkable item between the fixed-size
+       back/sidebar buttons and the fixed-size language + ticket buttons,
+       so at phone widths it got squeezed down to almost nothing and
+       "SWE IT Assist" wrapped one word per line. Let it truncate with an
+       ellipsis instead, and shrink its neighbors down to icon-only so
+       there's actually room left for the title. */
+    .workspace-title {
+
+        min-width: 0;
+
+        flex: 1;
+    }
+
+    .workspace-title h1,
+    .workspace-title span {
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #lang-current {
+
+        display: none;
+    }
+
+    .lang-trigger {
+
+        width: 36px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .workspace-status {
+
+        width: 36px;
+        height: 36px;
+        padding: 0;
+    }
+
+    .workspace-status span[data-i18n="sendTicket"] {
 
         display: none;
     }

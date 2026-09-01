@@ -48,6 +48,8 @@
 
 html {
     scroll-behavior: smooth;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -57,6 +59,8 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 html[lang="ar"] body {
@@ -1848,8 +1852,52 @@ textarea.invalid:focus, input.invalid:focus {
 
 @media (max-width: 640px) {
     .header {
-        padding: 0 18px;
+        padding: 0 16px;
         height: 68px;
+        gap: 10px;
+    }
+
+    /* The brand block and the right-side controls (language, back link,
+       user menu) don't fit side by side at phone widths at full size —
+       together they were forcing the header, and with it the whole page,
+       wider than the viewport (a real horizontal-scroll bug on phones).
+       Drop the secondary text and shrink the logo so everything stays in
+       one row without needing to wrap. */
+    .product-tag {
+        display: none;
+    }
+
+    .brand-divider {
+        display: none;
+    }
+
+    .logo-img {
+        height: 30px;
+    }
+
+    .brand {
+        gap: 10px;
+    }
+
+    .header-right {
+        gap: 8px;
+    }
+
+    #backLabel {
+        display: none;
+    }
+
+    .back-link {
+        padding: 10px;
+    }
+
+    .lang-trigger-label,
+    .lang-trigger-chevron {
+        display: none;
+    }
+
+    .lang-trigger {
+        padding: 10px;
     }
 
     .system-status span:last-child {
@@ -1914,5 +1962,20 @@ textarea.invalid:focus, input.invalid:focus {
 
     .page-head {
         flex-wrap: wrap;
+    }
+}
+
+/* Smallest phones (iPhone SE, older/compact Android) — even after the
+   640px trims above, "SWE IT Assist" next to the language + back +
+   logout controls is too tight. Drop the wordmark too; the logo alone
+   still identifies the app. */
+@media (max-width: 400px) {
+    .brand-text {
+        display: none;
+    }
+
+    .header {
+        padding: 0 12px;
+        gap: 8px;
     }
 }
