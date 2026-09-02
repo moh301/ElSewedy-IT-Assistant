@@ -956,12 +956,26 @@ button {
 
 /* Real brand logos (Oracle/Salesforce) aren't symmetric like the generic
    outline icons, so spinning them on hover reads as a jarring wobble
-   instead of a clean spin — keep the card lift, drop the rotation. */
+   instead of a clean spin — keep the card lift, drop the rotation. Same
+   for the Business Card door+arrow glyph and the Travel Portal
+   paper-plane glyph, which are both directional. */
 .category-card:hover .tile-icon--oracle,
 .category-card:focus-visible .tile-icon--oracle,
 .category-card:hover .tile-icon--salesforce,
-.category-card:focus-visible .tile-icon--salesforce {
+.category-card:focus-visible .tile-icon--salesforce,
+.category-card:hover .tile-icon--business-card,
+.category-card:focus-visible .tile-icon--business-card,
+.category-card:hover .tile-icon--travel-portal,
+.category-card:focus-visible .tile-icon--travel-portal {
     transform: none;
+}
+
+/* Both glyphs read as heading/entering left-to-right; mirror them in RTL
+   so they still point in the reading direction, matching the other
+   directional icons in the app (see .launcher-arrow above). */
+[dir="rtl"] .tile-icon--business-card svg,
+[dir="rtl"] .tile-icon--travel-portal svg {
+    transform: scaleX(-1);
 }
 
 .tile-title {

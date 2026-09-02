@@ -90,7 +90,9 @@ const TILE_ICONS = {
     other: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="7" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="26" y="7" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="7" y="26" width="15" height="15" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="26" y="26" width="15" height="15" rx="3" fill="#a9002c"/></svg>`,
     hub: `<svg viewBox="0 0 48 48" fill="none"><path d="M10 24v-2a14 14 0 0 1 28 0v2" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><rect x="6" y="22" width="8" height="14" rx="3" stroke="#17324d" stroke-width="2.4"/><rect x="34" y="22" width="8" height="14" rx="3" fill="#a9002c"/><path d="M38 36v2a4 4 0 0 1-4 4h-6" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/></svg>`,
     appsSupport: `<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="24" rx="3" stroke="#17324d" stroke-width="2.4"/><path d="M17 40h14" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><path d="M24 32v8" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><path d="M24 14.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z" stroke="#17324d" stroke-width="2.2"/><circle cx="24" cy="20" r="2" fill="#a9002c"/></svg>`,
-    booking: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="10" width="34" height="30" rx="3" stroke="#17324d" stroke-width="2.4"/><path d="M7 18h34" stroke="#17324d" stroke-width="2.4"/><path d="M15 6v8M33 6v8" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><rect x="15" y="24" width="8" height="8" rx="1.5" fill="#a9002c"/><rect x="27" y="24" width="6" height="6" rx="1.5" stroke="#17324d" stroke-width="2"/></svg>`
+    booking: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="10" width="34" height="30" rx="3" stroke="#17324d" stroke-width="2.4"/><path d="M7 18h34" stroke="#17324d" stroke-width="2.4"/><path d="M15 6v8M33 6v8" stroke="#17324d" stroke-width="2.4" stroke-linecap="round"/><rect x="15" y="24" width="8" height="8" rx="1.5" fill="#a9002c"/><rect x="27" y="24" width="6" height="6" rx="1.5" stroke="#17324d" stroke-width="2"/></svg>`,
+    businessCard: `<svg viewBox="0 0 48 48" fill="none"><rect x="9" y="9" width="20" height="30" rx="3" stroke="#17324d" stroke-width="2.4"/><circle cx="15.5" cy="24" r="1.6" fill="#17324d"/><path d="M29 24H41" stroke="#a9002c" stroke-width="2.4" stroke-linecap="round"/><path d="M35 18l6 6-6 6" stroke="#a9002c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    travelPortal: `<svg viewBox="0 0 48 48" fill="none"><path d="M5 34 43 7c1.6-1.1 3.6.6 2.7 2.4L28 43c-.6 1.2-2.3 1.1-2.8-.2L21 31 8 27c-1.3-.4-1.5-2.1-.3-2.8Z" fill="#17324d"/><path d="M21 31 33 15" stroke="#a9002c" stroke-width="2.2" stroke-linecap="round"/></svg>`
 };
 
 function tileIcon(key) {
@@ -285,16 +287,57 @@ function renderIndexPage(code) {
     wireAuthChrome(ui);
 }
 
-/* ---------- APPLICATION SUPPORT PAGE ---------- */
-// One app tile per supported business application (currently just
-// Oracle) — same launcher-card treatment as the homepage tiles, since
-// each one is a distinct destination rather than an accordion of common
-// issues. Add more apps by adding entries here plus a title/desc pair
-// in i18n.js.
+/* ---------- LINK-OUT TILE GRIDS (Application Support, Booking) ---------- */
+// Shared by any page that's just a grid of destination tiles rather than
+// an accordion of common issues — same category-tile treatment as the
+// homepage tiles. An entry uses either "iconKey" (a real brand logo from
+// ICONS, e.g. oracleLogo/salesforceLogo) or "tileIconKey" (a generic
+// two-tone icon from TILE_ICONS, for destinations with no brand mark to
+// show, like the internal IT Services or Travel portals).
 const APPS_SUPPORT_APPS = [
     { iconKey: "oracleLogo", badgeClass: "tile-icon--oracle", titleKey: "oracleErpTitle", descKey: "oracleErpDesc", href: "https://www.oracle.com/cloud/sign-in.html", external: true },
     { iconKey: "salesforceLogo", badgeClass: "tile-icon--salesforce", titleKey: "salesforceCrmTitle", descKey: "salesforceCrmDesc", href: "https://login.salesforce.com/", external: true }
 ];
+
+const BOOKING_APPS = [
+    { tileIconKey: "businessCard", badgeClass: "tile-icon--business-card", titleKey: "businessCardTitle", descKey: "businessCardDesc", href: "https://itservices.elsewedy.com/Login", external: true },
+    { tileIconKey: "travelPortal", badgeClass: "tile-icon--travel-portal", titleKey: "travelPortalTitle", descKey: "travelPortalDesc", href: "https://travel.elsewedy.com:5857/", external: true }
+];
+
+function buildAppTileCard(item, i, ui) {
+    const card = document.createElement("div");
+    card.className = "category-card app-tile-card";
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("role", "button");
+    card.style.animationDelay = `${Math.min(i * 0.05, 0.35)}s`;
+    const iconMarkup = item.tileIconKey ? tileIcon(item.tileIconKey) : icon(item.iconKey);
+    const iconBadgeClass = item.tileIconKey ? "" : "tile-icon--logo";
+    card.innerHTML = `
+        <div class="tile-icon ${iconBadgeClass} ${item.badgeClass || ""}">${iconMarkup}</div>
+        <div class="tile-title">${escapeHTML(ui[item.titleKey])}</div>
+        <div class="tile-reveal tile-reveal--static">
+            <p class="tile-desc">${escapeHTML(ui[item.descKey])}</p>
+            <span class="tile-btn"><span>${escapeHTML(ui.openApp)}</span>${icon("arrowRight")}</span>
+        </div>
+    `;
+    const go = () => {
+        if (item.external) {
+            window.open(item.href, "_blank", "noopener");
+        } else {
+            window.location.href = item.href;
+        }
+    };
+    card.addEventListener("click", go);
+    card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    return card;
+}
+
+function renderAppTileGrid(apps, ui) {
+    const grid = document.getElementById("categoryGrid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    apps.forEach((item, i) => grid.appendChild(buildAppTileCard(item, i, ui)));
+}
 
 function renderAppsSupportPage(code) {
     const ui = I18N[code].ui;
@@ -308,35 +351,7 @@ function renderAppsSupportPage(code) {
     setText("pageTitle", ui.appsSupportTitle);
     setText("pageSubtitle", ui.appsSupportDesc);
 
-    const grid = document.getElementById("categoryGrid");
-    if (grid) {
-        grid.innerHTML = "";
-        APPS_SUPPORT_APPS.forEach((item, i) => {
-            const card = document.createElement("div");
-            card.className = "category-card app-tile-card";
-            card.setAttribute("tabindex", "0");
-            card.setAttribute("role", "button");
-            card.style.animationDelay = `${Math.min(i * 0.05, 0.35)}s`;
-            card.innerHTML = `
-                <div class="tile-icon tile-icon--logo ${item.badgeClass || ""}">${icon(item.iconKey)}</div>
-                <div class="tile-title">${escapeHTML(ui[item.titleKey])}</div>
-                <div class="tile-reveal tile-reveal--static">
-                    <p class="tile-desc">${escapeHTML(ui[item.descKey])}</p>
-                    <span class="tile-btn"><span>${escapeHTML(ui.openApp)}</span>${icon("arrowRight")}</span>
-                </div>
-            `;
-            const go = () => {
-                if (item.external) {
-                    window.open(item.href, "_blank", "noopener");
-                } else {
-                    window.location.href = item.href;
-                }
-            };
-            card.addEventListener("click", go);
-            card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
-            grid.appendChild(card);
-        });
-    }
+    renderAppTileGrid(APPS_SUPPORT_APPS, ui);
 
     paintStaticIcons();
     renderLanguageSwitcher(code);
@@ -344,10 +359,35 @@ function renderAppsSupportPage(code) {
     wireAuthChrome(ui);
 }
 
-/* ---------- PLACEHOLDER PAGES (Booking, and anything else future) ---------- */
+/* ---------- BOOKING PAGE ---------- */
+// Same link-out tile grid as Application Support — IT Services and
+// Travel are both third-party portals we hand off to, not forms we own.
+function renderBookingPage(code) {
+    const ui = I18N[code].ui;
+
+    document.title = `${ui.bookingTitle}${ui.titleSuffix}`;
+
+    setText("productTag", ui.productTag);
+    setText("backLabel", ui.breadcrumbHome);
+    setText("crumbHome", ui.breadcrumbHome);
+    setText("crumbCurrent", ui.bookingTitle);
+    setText("pageTitle", ui.bookingTitle);
+    setText("pageSubtitle", ui.bookingDesc);
+
+    renderAppTileGrid(BOOKING_APPS, ui);
+
+    paintStaticIcons();
+    renderLanguageSwitcher(code);
+    initHeaderSearch(code);
+    wireAuthChrome(ui);
+}
+
+/* ---------- PLACEHOLDER PAGES (anything not built out yet) ---------- */
 // Simple "coming soon" pages sharing the same header/breadcrumb/hero
 // pattern as support.html — just a dashed placeholder card instead of
-// real content, until each of these gets built out.
+// real content, until each of these gets built out. Not currently wired
+// to any page (Booking now has real link-out tiles — see below) but kept
+// around for the next "coming soon" section.
 function renderPlaceholderPage(code, titleKey, descKey) {
     const ui = I18N[code].ui;
 
@@ -776,7 +816,7 @@ function renderCurrentPage(code) {
     if (page === "category") renderCategoryPage(code);
     if (page === "support") renderSupportPage(code);
     if (page === "apps-support") renderAppsSupportPage(code);
-    if (page === "booking") renderPlaceholderPage(code, "bookingTitle", "bookingDesc");
+    if (page === "booking") renderBookingPage(code);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
